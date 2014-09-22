@@ -87,10 +87,7 @@ define([
                 //resources: this.ui.resourcesInput.val()
             });
 
-            console.log(model);
-
             if (!model.isValid()) {
-                console.log('error');
                 return;
             }
 

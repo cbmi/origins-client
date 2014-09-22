@@ -1,11 +1,21 @@
 <div class=page-info>
-    <h3><i class='fa fa-archive'></i> <%= data.label %></h3>
+    <h2><i class='fa fa-archive'></i> <%= data.label %></h2>
 
-    <p><%= data.description %></p>
+    <% if (data.description) { %>
+        <p><%= data.description %></p>
+    <% } else { %>
+        <p class=text-muted>No description given.</p>
+    <% } %>
 
     <ul class=list-unstyled>
-        <li><strong title='# of resources in this collection'><i class='fa fa-fw fa-cubes'></i> <%= data.resource_count %></strong> resources</li>
+        <li><strong title='# of resources in this collection'><i class='fa fa-fw fa-cubes'></i>
+            <% if (data.resource_count === 1) { %>
+                1 resource
+            <% } else { %>
+                <%= data.resource_count %> resources
+            <% } %>
+        </strong></li>
     </ul>
 </div>
 
-<div data-region=resources></div>
+<div data-region=list></div>

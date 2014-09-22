@@ -434,7 +434,7 @@ module.exports = function(grunt) {
 
             // Append index.html to file for directory-based matches
             if (path.extname(pathname) === '') {
-                filename = path.join(options.base, pathname, 'index.html');
+                filename = path.join(options.base, 'index.html');
             } else {
                 filename = path.join(options.base, pathname);
             }

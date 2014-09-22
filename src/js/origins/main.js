@@ -37,14 +37,14 @@ require({
         },
 
         index: function() {
-            var view = new origins.views.Index();
+            var view = new origins.views.IndexPage();
 
             app.main.show(view);
         },
 
         search: function() {
             var view = new origins.views.SearchPage({
-                collection: origins.store.results
+                model: origins.store.search
             });
 
             app.main.show(view);
@@ -201,8 +201,8 @@ require({
         var api = new origins.models.Api(null, {url: origins.config.get('api')}),
             router = new Router();
 
-        api.fetch().done(function() {
-            origins.urls = api.get('_links');
+        api.fetch().then(function() {
+            origins.urls = api.get('links');
 
             var options = origins.config.get('history');
 
@@ -214,11 +214,11 @@ require({
 
             origins.search.on('search', function(query) {
                 var url = 'search/?' + $.param({query: query});
-                origins.store.results.search(query);
+                origins.store.search.search(query);
 
                 var trigger = true;
 
-                if (history.getFragment().slice(0, 7) === 'search/') {
+                if (Backbone.history.getFragment().slice(0, 7) === 'search/') {
                     trigger = false;
                 }
 
@@ -238,6 +238,10 @@ require({
 
            // Route based on the URL
             $(document).on('click', 'a', function(event) {
+                if (this.dataset.toggle) {
+                    return;
+                }
+
                 // Path of the target link
                 var path = this.pathname;
 
@@ -273,6 +277,12 @@ require({
                     event.preventDefault();
                 }
             });
+        }, function() {
+            var view = new origins.views.ErrorPage({
+                message: 'Communication error...'
+            });
+
+            app.main.show(view);
         });
 
     });

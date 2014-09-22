@@ -62,7 +62,7 @@ define([
             model[key] = instance;
 
             instance.url = function() {
-                return model.get('_links')[key].href;
+                return model.get('links')[key].href;
             };
         });
     };
@@ -330,6 +330,10 @@ define([
             resources: Resources
         },
 
+        validate: function(attrs) {
+            if (!attrs.label) return {label: 'required'};
+        },
+
         url: function() {
             var t = url.parse(origins.urls.collections.href);
             return t.expand({uuid: this.get('uuid')});
@@ -348,6 +352,61 @@ define([
 
         url: function() {
             return origins.urls.collections.href;
+        }
+    });
+
+
+    var Search = BaseModel.extend({
+        initialize: function() {
+            this.resources = new Resources();
+            this.components = new Components();
+            this.relationships = new Relationships();
+        },
+
+        url: function() {
+            return origins.urls.search.href;
+        },
+
+        search: function(query) {
+            // Reference the original URL the first time this is accessed
+            if (!this._url) this._url = this.url;
+
+            // Abort previous request if present
+            if (this._xhr) this._xhr.abort();
+
+            if (query) {
+                var _this = this;
+
+                this.url = function() {
+                    return _.result(_this, '_url') + '?' + $.param({query: query});
+                };
+
+                this.fetch({parse: true});
+            }
+            else {
+                this.url = this._url;
+                this.set(this.previousAttributes, {parse: true});
+            }
+        },
+
+        parse: function(attrs) {
+            var resources, components, relationships;
+
+            if (attrs.resources[1] === 200) {
+                resources = attrs.resources[0];
+            }
+
+            if (attrs.components[1] === 200) {
+                components = attrs.components[0];
+            }
+
+            if (attrs.relationships[1] === 200) {
+                relationships = attrs.relationships[0];
+            }
+
+            this.resources.reset(resources);
+            this.components.reset(components);
+            this.relationships.reset(relationships);
         }
     });
 
@@ -373,13 +432,12 @@ define([
         nosync: true
     });
 
-    // Search results, currently just components
-    store.results = new Components(null, {
-        comparator: 'label'
-    });
+    // Search
+    store.search = new Search();
 
     return {
         Api: Api,
+        Search: Search,
         Collections: Collections,
         Collection: Collection,
         Resources: Resources,

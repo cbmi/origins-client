@@ -1,0 +1,5 @@
+<% if (data.outgoing) { %>
+<a href='/components/<%= data.end.uuid %>'><%= data.end.label %></a> <strong><%= data.type %></strong> <span class=text-muted>this component</span>
+<% } else { %>
+    <span class=text-muted>This component</span> <strong><%= data.type %></strong> <a href='/components/<%= data.start.uuid %>'><%= data.start.label %></a>
+<% } %>

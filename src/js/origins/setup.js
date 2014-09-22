@@ -7,7 +7,8 @@ define([
     'jquery',
     'loglevel',
     './notify',
-    './core'
+    './core',
+    'bootstrap'
 ], function(_, Backbone, Marionette, $, loglevel, notify, origins) {
 
     // Extend Marionette template loader facilities to use Origins template API
@@ -41,13 +42,12 @@ define([
 
     // Support cross origin requests with credentials (i.e. cookies)
     // See http://www.html5rocks.com/en/tutorials/cors/
-    /*
-    $.ajaxPrefilter(function() {
+
+    $.ajaxPrefilter(function(xhr, settings) {
         settings.xhrFields = {
             withCredentials: true
         };
     });
-    */
 
     // Setup debugging facilities
     if (origins.config.get('debug')) {
@@ -88,7 +88,7 @@ define([
     $(document).ajaxError(function(event, xhr, settings, exception) {
         // A statusText value of 'abort' is an aborted request which is
         // usually intentional by the app or from a page reload.
-        if (xhr.statusText === 'abort') return;
+        if (xhr.statusText === 'abort' || (xhr.status >= 300 && xhr.status < 400)) return;
 
         var message = '';
 
@@ -105,61 +105,10 @@ define([
 
         origins.notify({
             timeout: null,
-            dismissable: false,
-            level: 'error',
+            level: 'danger',
             header: 'Uh oh.',
             message: message
         });
     });
-
-    // Page visibility API: http://stackoverflow.com/a/1060034/407954
-    var hidden = 'hidden';
-
-    var visibilityMap = {
-        focus: true,
-        focusin: true,
-        pageshow: true,
-        blur: false,
-        focusout: false,
-        pagehide: false
-    };
-
-    function onchange (event) {
-        event = event || window.event;
-
-        var isVisible;
-
-        // Map visibility
-        if (event.type in visibilityMap) {
-            isVisible = visibilityMap[event.type];
-        } else {
-            isVisible = !this[hidden];
-        }
-
-        // Trigger 'visible' and 'hidden' events on origins
-        if (isVisible === true) {
-            origins.trigger('visible');
-        } else if (isVisible === false) {
-            origins.trigger('hidden');
-        }
-    }
-
-    // Standards
-    if (hidden in document) {
-        document.addEventListener('visibilitychange', onchange);
-    } else if ((hidden = 'mozHidden') in document) {
-        document.addEventListener('mozvisibilitychange', onchange);
-    } else if ((hidden = 'webkitHidden') in document) {
-        document.addEventListener('webkitvisibilitychange', onchange);
-    } else if ((hidden = 'msHidden') in document) {
-        document.addEventListener('msvisibilitychange', onchange);
-    // IE 9 and lower
-    } else if ('onfocusin' in document) {
-        document.onfocusin = document.onfocusout = onchange;
-    // All others
-    } else {
-        window.onpageshow = window.onpagehide =
-            window.onfocus = window.onblur = onchange;
-    }
 
 });

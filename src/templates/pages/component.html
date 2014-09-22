@@ -1,44 +1,59 @@
 <div class=page-info>
-    <h2><i class='fa fa-cube'></i> <%= data.label %> <small>in <a href='/resources/<%= data.resource.uuid %>/'><%= data.resource.label %></a></small></h2>
-
-    <div data-region=path></div>
-
-    <p class=lead><%= data.description %></p>
-
-    <ul class=list-unstyled>
-        <li><strong title='type'><i class='fa fa-fw fa-code'></i> <%= data.type %></strong> type</li>
-        <li><strong title='relationships'><i class='fa fa-fw fa-arrows-h'></i> <%= data.relationship_count %> relationships</strong> defined in this resource</li>
-        <li><strong title='resources'><i class='fa fa-fw fa-cubes'></i> <%= data.resource_count %> resources</strong> include this component</li>
-    </ul>
+    <h2><i class='fa fa-cube'></i> <%= data.label %> <small>in <a href='<%= data.links.resource.href %>'><%= data.resource.label %></a></small></h2>
 </div>
 
-<div class=page-section>
-    <div class=row>
-        <div class=col-md-4>
-            <h4>Properties</h4>
-            <div data-region=properties></div>
-        </div>
-
-        <div class=col-md-4>
-            <h4>Relationships</h4>
-            <div data-region=relationships></div>
-        </div>
-        <div class=col-md-4>
-            <h4>Sources</h4>
-            <div data-region=sources></div>
-        </div>
+<div class=row>
+    <div class='col-xs-3 col-sm-3 col-md-2'>
+        <ul class='nav nav-pills nav-stacked' role=tablist>
+            <li class=active><a href=#summary role=tab data-toggle=tab>Summary</a></li>
+            <li><a href=#properties role=tab data-toggle=tab>Properties</a></li>
+            <li><a href=#sources role=tab data-toggle=tab>Sources</a></li>
+            <li><a href=#derivatives role=tab data-toggle=tab>Derivatives</a></li>
+            <li><a href=#relationships role=tab data-toggle=tab>Relationships</a></li>
+            <li><a href=#revisions role=tab data-toggle=tab>Revisions</a></li>
+            <li><a href=#timeline role=tab data-toggle=tab>Timeline</a></li>
+        </ul>
     </div>
-</div>
 
-<div class=page-section>
-    <div class=row>
-        <div class=col-md-6>
-            <h4>Revisions</h4>
-            <div data-region=revisions></div>
-        </div>
-        <div class=col-md-6>
-            <h4>Timeline</h4>
-            <div data-region=timeline></div>
+    <div class='col-xs-9 col-sm-9 col-md-10'>
+        <div class=tab-content>
+            <div id=summary class='tab-pane active'>
+                <h4>Description</h4>
+
+                <% if (data.description) { %>
+                    <p><%= data.description %></p>
+                <% } else { %>
+                    <p class=text-muted>No description given.</p>
+                <% } %>
+
+                <h4>Type</h4>
+
+                <strong title='type'><i class='fa fa-fw fa-code'></i> <%= data.type %></strong>
+            </div>
+
+            <div id=properties class='tab-pane'>
+                <div data-region=properties></div>
+            </div>
+
+            <div id=sources class='tab-pane'>
+                <div data-region=sources></div>
+            </div>
+
+            <div id=derivatives class='tab-pane'>
+                <div data-region=derivatives></div>
+            </div>
+
+            <div id=relationships class='tab-pane'>
+                <div data-region=relationships></div>
+            </div>
+
+            <div id=revisions class='tab-pane'>
+                <div data-region=revisions></div>
+            </div>
+
+            <div id=timeline class='tab-pane'>
+                <div data-region=timeline></div>
+            </div>
         </div>
     </div>
 </div>

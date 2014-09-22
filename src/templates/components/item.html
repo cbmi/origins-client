@@ -1,0 +1,11 @@
+<div class='item-heading'>
+    <h4><i class='fa fa-cube'></i> <%= data.type %> <i class='fa fa-angle-right'></i> <a href='<%= data.links.self.href %>'><%= data.label %></a></h4>
+</div>
+
+<div class='item-content'>
+    <% if (data.description) { %>
+        <p><%= data.description %></p>
+    <% } else { %>
+        <p class=text-muted>No description given.</p>
+    <% } %>
+</div>

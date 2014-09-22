@@ -5,29 +5,23 @@
         <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
         <meta name='viewport' content='width=device-width'>
 
-        <title>Origins Demo</title>
+        <title>Origins</title>
 
         <link rel=stylesheet href='/css/bootstrap.css'>
         <link rel=stylesheet href='/css/font-awesome.css'>
         <link rel=stylesheet href='/css/origins.css'>
     </head>
     <body>
-        <div class='navbar navbar-default navbar-fixed-top'>
-            <div class=container-fluid>
-                <div class=navbar-header>
-                    <a class=navbar-brand href='/'><i class='fa fa-book'></i> Origins</a>
-                </div>
+        <header>
+            <a class=brand tabindex=-1 href='/'>Origins</a>
 
-                <ul class='navbar-nav nav'>
-                    <li><a href='/collections/'><i class='fa fa-archive'></i> Collections</a></li>
-                    <li><a href='/resources/'><i class='fa fa-cubes'></i> Resources</a></li>
-                </ul>
+            <ul class='header-nav'>
+                <li><a href='/collections/' tabindex=-1 title='Browse collections'><i class='fa fa-archive'></i> <span class='hidden-xs'>Collections</span></a></li>
+                <li><a href='/resources/' tabindex=-1 title='Browse resources'><i class='fa fa-cubes'></i> <span class='hidden-xs'>Resources</span></a></li>
+            </ul>
 
-                <div class='navbar-form'>
-                    <input id=search type=search class=form-control placeholder='Search...' autocomplete=off>
-                </div>
-            </div>
-        </div>
+            <input id=search type=search tabindex=0 placeholder='Search...' autocomplete=off title='Search resources, components, and relationships'>
+        </header>
 
         <div id='main'>
             <div class='spinner'><i class='fa fa-circle-o-notch fa-spin'></i></div>

@@ -4,12 +4,16 @@
   "license": "BSD",
   "description": "HTML5 and JavaScript client for Origins",
   "homepage": "https://github.com/cbmi/origins-client/",
-  "keywords": ["origins"],
+  "keywords": [
+    "origins"
+  ],
   "author": "The Children's Hospital of Philadelphia",
-  "contributors": [{
+  "contributors": [
+    {
       "name": "Byron Ruth",
       "email": "b@devel.io"
-  }],
+    }
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/cbmi/origins-client.git"
@@ -26,6 +30,7 @@
     "grunt-contrib-sass": "~0.7.3",
     "grunt-contrib-watch": "~0.6.1",
     "grunt-symlink": "~0.4.0",
+    "grunt-sync": "^0.2.0",
     "grunt-template-jasmine-requirejs": "~0.1.10",
     "jshint": "^2.5.1",
     "jshint-stylish": "^0.1.5",

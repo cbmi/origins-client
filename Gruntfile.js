@@ -74,31 +74,54 @@ module.exports = function(grunt) {
             }
         },
 
+        sync: {
+            local: {
+                files: [{
+                    expand: true,
+                    cwd: '<%= srcDir %>',
+                    src: [
+                        'js/**/**.js',
+                        'css/**/*.css',
+                        'fonts/**/*',
+                        'img/**/*',
+                    ],
+                    dest: '<%= localDir %>',
+                }, {
+                    expand: true,
+                    cwd: '<%= srcDir %>/html',
+                    src: ['**/*.html'],
+                    dest: '<%= localDir %>'
+                }, {
+                    expand: true,
+                    cwd: '<%= srcDir %>/templates',
+                    src: [
+                        '**/*.html'
+                    ],
+                    dest: '<%= localDir %>/js/templates'
+                }],
+                verbose: true
+            }
+        },
+
         watch: {
             grunt: {
                 tasks: ['local'],
                 files: ['Gruntfile.js']
             },
-            copy: {
-                tasks: ['copy:local'],
-                files: [
-                    '<%= srcDir %>/html/**/**/*',
-                    '<%= srcDir %>/js/**/**/**/*',
-                    '<%= srcDir %>/css/**/**/**/*',
-                    '<%= srcDir %>/fonts/**/**/**/*',
-                    '<%= srcDir %>/img/**/**/**/*',
-                    '<%= srcDir %>/templates/**/**/**/*',
-                ]
+            src: {
+                tasks: ['sync:local'],
+                files: ['<%= srcDir %>/**/*']
             },
             tests: {
                 tasks: ['jasmine:local:build'],
-                files: ['<%= specDir %>/**/**/**/*']
+                files: ['<%= specDir %>/**/*']
             },
             sass: {
                 tasks: ['sass:local'],
-                files: ['<%= srcDir %>/scss/**/**/**/*']
+                files: ['<%= srcDir %>/scss/**/*']
             }
         },
+
         sass: {
             options: {
                 sourcemap: true
@@ -109,8 +132,7 @@ module.exports = function(grunt) {
                     style: 'expanded'
                 },
                 files: {
-                    '<%= localDir %>/css/origins.css': '<%= srcDir %>/scss/origins.scss',
-                    '<%= localDir %>/css/editor.css': '<%= srcDir %>/scss/editor.scss'
+                    '<%= localDir %>/css/origins.css': '<%= srcDir %>/scss/origins.scss'
                 }
             },
             dist: {
@@ -119,8 +141,7 @@ module.exports = function(grunt) {
                     style: 'compressed'
                 },
                 files: {
-                    '<%= distDir %>/css/origins.css': '<%= srcDir %>/scss/origins.scss',
-                    '<%= distDir %>/css/editor.css': '<%= srcDir %>/scss/editor.scss'
+                    '<%= distDir %>/css/origins.css': '<%= srcDir %>/scss/origins.scss'
                 }
             },
             cdn: {
@@ -130,46 +151,15 @@ module.exports = function(grunt) {
                     style: 'compressed'
                 },
                 files: {
-                    '<%= cdnDir %>/css/origins.css': '<%= srcDir %>/scss/origins.scss',
-                    '<%= cdnDir %>/css/editor.css': '<%= srcDir %>/scss/editor.scss'
+                    '<%= cdnDir %>/css/origins.css': '<%= srcDir %>/scss/origins.scss'
                 }
             }
         },
+
         copy: {
             local: {
                 files: [
                     {
-                        expand: true,
-                        cwd: '<%= srcDir %>/html',
-                        src: ['**/*'],
-                        // Copy directory into local directory
-                        dest: '<%= localDir %>'
-                    }, {
-                        expand: true,
-                        cwd: '<%= srcDir %>/js',
-                        src: ['**/*'],
-                        dest: '<%= localDir %>/js'
-                    }, {
-                        expand: true,
-                        cwd: '<%= srcDir %>/css',
-                        src: ['**/*'],
-                        dest: '<%= localDir %>/css'
-                    }, {
-                        expand: true,
-                        cwd: '<%= srcDir %>/fonts',
-                        src: ['**/*'],
-                        dest: '<%= localDir %>/fonts'
-                    }, {
-                        expand: true,
-                        cwd: '<%= srcDir %>/img',
-                        src: ['**/*'],
-                        dest: '<%= localDir %>/img'
-                    }, {
-                        expand: true,
-                        cwd: '<%= srcDir %>/templates',
-                        src: ['**/*'],
-                        dest: '<%= localDir %>/js/templates'
-                    }, {
                         expand: true,
                         src: ['bower.json', 'package.json'],
                         dest: '<%= localDir %>'
@@ -387,6 +377,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-amdcheck');
+    grunt.loadNpmTasks('grunt-sync');
 
     grunt.registerMultiTask('serve', 'Run a Node server for testing', function() {
         var http = require('http'),
@@ -481,7 +472,8 @@ module.exports = function(grunt) {
 
     grunt.registerTask('local', 'Creates a build for local development and testing', [
         'sass:local',
-        'copy:local',
+        //'copy:local',
+        'sync:local',
         'jasmine:local:build'
     ]);
 
@@ -507,6 +499,7 @@ module.exports = function(grunt) {
 
     grunt.registerTask('work', 'Local build and starts a watch process', [
         'local',
+        'sync',
         'watch'
     ]);
 

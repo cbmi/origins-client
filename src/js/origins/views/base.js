@@ -15,7 +15,7 @@ define([
 
         serializeData: function() {
             return {
-                message: this.options.message
+                message: this.getOption('message')
             };
         }
     });
@@ -29,7 +29,7 @@ define([
 
         serializeData: function() {
             return {
-                message: this.options.message
+                message: this.getOption('message')
             };
         }
     });
@@ -39,8 +39,8 @@ define([
 
         serializeData: function() {
             return {
-                header: this.options.header,
-                message: this.options.message
+                header: this.getOption('header'),
+                message: this.getOption('message')
             };
         }
     });
@@ -51,8 +51,8 @@ define([
 
         serializeData: function() {
             return {
-                header: this.options.header,
-                message: this.options.message
+                header: this.getOption('header'),
+                message: this.getOption('message')
             };
         }
     });
@@ -96,18 +96,18 @@ define([
             if (this.collection) {
                 if (this.collection.fetchError) {
                     return {
-                        message: this.options.errorMessage
+                        message: this.getOption('errorMessage')
                     };
                 }
                 else if (this.collection.fetching) {
                     return {
-                        message: this.options.loadingMessage
+                        message: this.getOption('loadingMessage')
                     };
                 }
             }
 
             return {
-                message: this.options.emptyMessage
+                message: this.getOption('emptyMessage')
             };
         }
     });

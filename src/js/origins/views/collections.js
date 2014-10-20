@@ -38,7 +38,7 @@ define([
             list: '[data-region=list]'
         },
 
-        onRender: function() {
+        onShow: function() {
             var list = new resources.ResourceList({
                 collection: this.model.resources
             });
@@ -68,7 +68,7 @@ define([
             'click @ui.cancelButton': 'cancel'
         },
 
-        onRender: function() {
+        onShow: function() {
             this.$el.modal({
                 show: false,
                 keyboard: false,
@@ -141,7 +141,7 @@ define([
             modal: '[data-region=modal]'
         },
 
-        onRender: function() {
+        onShow: function() {
             var list = new CollectionList({
                 collection: this.collection
             });

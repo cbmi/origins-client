@@ -103,7 +103,7 @@ define([
             relationships: '[data-region=relationships]'
         },
 
-        onRender: function() {
+        onShow: function() {
             this.bindCollection({
                 collection: this.model.resources,
                 element: this.ui.resourceCount,

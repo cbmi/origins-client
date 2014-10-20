@@ -61,7 +61,7 @@ define([
             }, timeout);
         },
 
-        onRender: function() {
+        onShow: function() {
             // Add class based on the level.
             this.$el.addClass('alert-' + this.model.get('level'));
 

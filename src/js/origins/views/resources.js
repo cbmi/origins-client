@@ -15,7 +15,7 @@ define([
 
         className: 'item resource-item',
 
-        onRender: function() {
+        onShow: function() {
 
         }
     });
@@ -50,7 +50,7 @@ define([
             resources: '[data-region=resources]'
         },
 
-        onRender: function() {
+        onShow: function() {
             var resources = new ResourceList({
                 collection: this.collection
             });
@@ -105,10 +105,20 @@ define([
                         JSON.stringify(resp.relationships, null, 4)
                 });
             }, function(resp) {
+                var text;
+
+                try {
+                    text = JSON.parse(resp.responseText).message;
+                }
+                catch (e) {
+                    text = resp.responseText;
+                }
+
                 origins.notify({
                     timeout: false,
+                    level: 'warning',
                     header: 'Error syncing "' + file.name + '"',
-                    message: unescape(resp.responseText)
+                    message: '<pre>' + text + '</pre>'
                 });
             });
         }
@@ -125,7 +135,7 @@ define([
             components: '[data-region=components]'
         },
 
-        onRender: function() {
+        onShow: function() {
             /*
             var types = new components.ComponentTypeList({
                 collection: this.model.component_types  // jshint ignore:line

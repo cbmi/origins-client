@@ -25,6 +25,7 @@ require({
         }
     });
 
+
     var Router = Backbone.Router.extend({
         routes: {
             '': 'index',
@@ -38,12 +39,16 @@ require({
         },
 
         index: function() {
+            origins.utils.setDocumentTitle();
+
             var view = new origins.views.IndexPage();
 
             app.main.show(view);
         },
 
         search: function() {
+            origins.utils.setDocumentTitle('Search');
+
             var view = new origins.views.SearchPage({
                 model: origins.store.search
             });
@@ -52,6 +57,8 @@ require({
         },
 
         collections: function() {
+            origins.utils.setDocumentTitle('Collections');
+
             var view = new origins.views.CollectionsPage({
                 collection: origins.store.collections
             });
@@ -79,10 +86,15 @@ require({
                 var model = origins.store.collections.get(uuid);
 
                 if (!model) {
+                    origins.utils.setDocumentTitle('Collection Not Found');
+
                     view = new origins.views.ObjectNotFound({
                         message: 'Collection ' + uuid + ' not found :('
                     });
                 } else {
+                    origins.utils.setDocumentTitle('Collection "' +
+                        model.get('label') + '"');
+
                     model.resources.ensure();
 
                     view = new origins.views.CollectionPage({
@@ -95,6 +107,8 @@ require({
         },
 
         resources: function() {
+            origins.utils.setDocumentTitle('Resources');
+
             var view = new origins.views.ResourcesPage({
                 collection: origins.store.resources
             });
@@ -124,10 +138,15 @@ require({
                 var model = origins.store.resources.get(uuid);
 
                 if (!model) {
+                    origins.utils.setDocumentTitle('Resource Not Found');
+
                     view = new origins.views.ObjectNotFound({
                         message: 'Resource ' + uuid + ' not found :('
                     });
                 } else {
+                    origins.utils.setDocumentTitle('Resource "' +
+                        model.get('label') + '"');
+
                     model.components.ensure();
 
                     view = new origins.views.ResourcePage({
@@ -145,6 +164,9 @@ require({
             section = section || 'summary';
 
             if (model) {
+                origins.utils.setDocumentTitle('Component "' + model.get('label') +
+                    '" | ' + section.toTitleCase());
+
                 view = new origins.views.ComponentPage({
                     model: model,
                     section: section
@@ -178,6 +200,8 @@ require({
 
                 return;
             }
+
+            origins.utils.setDocumentTitle('Component Not Found');
 
             this.error({
                 header: 'Component not found :(',

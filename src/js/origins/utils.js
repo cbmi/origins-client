@@ -2,8 +2,48 @@
 
 define([
     'jquery',
+    'backbone',
     'loglevel'
-], function($, loglevel) {
+], function($, Backbone, loglevel) {
+
+    if (!String.prototype.toTitleCase) {
+        String.prototype.toTitleCase = function() {
+            // Do not title case strings that aren't completely lowercase
+            if (this.toLowerCase() !== this) return this;
+
+            return this.replace(/\w\S*/g, function(text) {
+                return text.charAt(0).toUpperCase() + text.substr(1).toLowerCase();
+            });
+        };
+    }
+
+    var setDocumentTitle = function(title) {
+        if (!title) {
+            title = 'Origins';
+        }
+        else {
+            title = 'Origins | ' + title;
+        }
+
+        document.title = title;
+    };
+
+    var documentPath = function() {
+        // Path of the target link
+        var path = document.location.pathname;
+
+        // Handle IE quirk
+        if (path.charAt(0) !== '/') path = '/' + path;
+
+        // Trim off the root on the path if present
+        var root = Backbone.history.root || '/';
+
+        if (path.slice(0, root.length) === root) {
+            path = path.slice(root.length);
+        }
+
+        return path;
+    };
 
     // Convenience method for getting a value using the dot-notion for
     // accessing nested structures.
@@ -165,6 +205,8 @@ define([
     };
 
     return {
+        documentPath: documentPath,
+        setDocumentTitle: setDocumentTitle,
         deparam: deparam,
         pprint: pprint,
         getDotProp: getDotProp,

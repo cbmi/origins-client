@@ -26,8 +26,19 @@ p {
     font-size: 12px;
 
     > .alert {
+        float: right;
         width: 300px;
         overflow: auto;
+
+        pre {
+            background: inherit;
+            border: none;
+            font-size: 12px;
+        }
+
+        &.alert-warning {
+            width: 500px;
+        }
     }
 }
 

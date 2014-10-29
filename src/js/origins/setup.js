@@ -88,7 +88,7 @@ define([
     $(document).ajaxError(function(event, xhr, settings, exception) {
         // A statusText value of 'abort' is an aborted request which is
         // usually intentional by the app or from a page reload.
-        if (xhr.statusText === 'abort' || (xhr.status >= 300 && xhr.status < 400)) return;
+        if (xhr.statusText === 'abort' || (xhr.status >= 300 && xhr.status < 500)) return;
 
         var message = '';
 
@@ -96,7 +96,8 @@ define([
             // An empty exception value is an unknown error which usually
             // means the server is unavailable.
             message = 'The application is no longer responding.';
-        } else {
+        }
+        else {
             // General purpose error message
             message = 'There is a communication problem with the server. ' +
                 '<a href="#" onclick="location.reload()">Refreshing</a> ' +
@@ -105,6 +106,7 @@ define([
 
         origins.notify({
             timeout: null,
+            dismissable: true,
             level: 'danger',
             header: 'Uh oh.',
             message: message

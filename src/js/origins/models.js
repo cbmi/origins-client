@@ -144,8 +144,8 @@ define([
         },
 
         parse: function(attrs) {
-            if (attrs && attrs.timestamp) {
-                attrs.parsedTimestamp = new Date(attrs.timestamp);
+            if (attrs && attrs.time) {
+                attrs.parsedTime = new Date(attrs.time);
             }
 
             return attrs;

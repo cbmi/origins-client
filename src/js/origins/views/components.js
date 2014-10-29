@@ -4,9 +4,10 @@ define([
     'underscore',
     'backbone',
     'marionette',
+    '../utils',
     './base',
     './relationships'
-], function(_, Backbone, Marionette, base, relationships) {
+], function(_, Backbone, Marionette, utils, base, relationships) {
 
 
     var RevisionItem = Marionette.ItemView.extend({
@@ -19,7 +20,11 @@ define([
     var ComponentItem = Marionette.ItemView.extend({
         template: 'components/item',
 
-        className: 'item component-item'
+        className: 'item component-item',
+
+        behaviors: {
+            TimeSince: {}
+        }
     });
 
     var ComponentList = base.CollectionView.extend({
@@ -73,7 +78,7 @@ define([
 
         options: {
             loadingMessage: 'Loading sources...',
-            emptyMessage: 'Component does not have any sources.'
+            emptyMessage: 'Component does not have any known sources.'
         }
     });
 
@@ -98,50 +103,104 @@ define([
 
         className: 'page component-page',
 
-        regions: {
-            properties: '[data-region=properties]',
-            relationships: '[data-region=relationships]',
-            revisions: '[data-region=revisions]',
-            timeline: '[data-region=timeline]',
-            sources: '[data-region=sources]'
+        ui: {
+            nav: '[data-target=nav]',
+            sections: '[data-target=sections]'
         },
 
-        onRender: function() {
-            var properties = new PropertiesTable({
+        regions: {
+            path: '[data-region=path]',
+            content: '[data-region=content]',
+        },
+
+        sections: {
+            'summary': 'renderSummary',
+            'properties': 'renderProperties',
+            'sources': 'renderSources',
+            'derivatives': 'renderDerivatives',
+            'relationships': 'renderRelationships',
+            'revisions': 'renderRevisions',
+            'timeline': 'renderTimeline',
+        },
+
+        onShow: function() {
+            this.ui.nav.find('[href="' + utils.documentPath() + '"]')
+                .parent().addClass('active');
+
+            var section = this.options.section || 'summary',
+                method = this.sections[section];
+
+            if (method) {
+                this[method]();
+            }
+            else {
+                var view = new base.ErrorPage({
+                    message: 'Page not found :('
+                });
+
+                this.content.show(view);
+            }
+
+            //this.path.show(path);
+        },
+
+        renderSummary: function() {
+
+        },
+
+        renderProperties: function() {
+            var view = new PropertiesTable({
                 model: this.model.properties
             });
 
-            var rels = new relationships.ReferencedRelationshipList({
+            this.content.show(view);
+        },
+
+        renderRelationships: function() {
+            this.model.relationships.ensure();
+
+            var view = new relationships.ReferencedRelationshipList({
                 collection: this.model.relationships,
                 reference: this.model
             });
 
-            var sources = new ComponentSourceList({
+            this.content.show(view);
+        },
+
+        renderSources: function() {
+            //this.model.sources.ensure();
+
+            var view = new ComponentSourceList({
                 collection: this.model.sources
             });
 
-            var timeline = new TimelineList({
+            this.content.show(view);
+        },
+
+        renderDerivatives: function() {
+
+        },
+
+        renderTimeline: function() {
+            //this.model.timeline.ensure();
+
+            var view = new TimelineList({
                 collection: this.model.timeline
             });
 
-            var revisions = new ComponentList({
+            this.content.show(view);
+        },
+
+        renderRevisions: function() {
+            this.model.revisions.ensure();
+
+            var view = new ComponentList({
                 tagName: 'ul',
                 childView: RevisionItem,
                 collection: this.model.revisions
             });
 
-            // Ensure the related items are fetched
-            //this.model.relationships.ensure();
-            //this.model.sources.ensure();
-            //this.model.timeline.ensure();
-            //this.model.revisions.ensure();
-
-            //this.path.show(path);
-            this.properties.show(properties);
-            //this.relationships.show(rels);
-            //this.sources.show(sources);
-            //this.timeline.show(timeline);
-            this.revisions.show(revisions);
+            this.content.show(view);
         }
     });
 

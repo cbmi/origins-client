@@ -2,6 +2,7 @@
 
 define([
     'underscore',
+    './views/behaviors',
     './views/base',
     './views/search',
     './views/pages',

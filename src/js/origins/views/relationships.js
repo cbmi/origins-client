@@ -19,6 +19,7 @@ define([
             var data = this.model.toJSON();
 
             data.outgoing = this.reference.get('uuid') === data.start.uuid;
+            data.reference = this.reference.toJSON();
 
             return data;
         }

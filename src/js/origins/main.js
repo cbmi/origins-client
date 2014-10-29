@@ -33,6 +33,7 @@ require({
             'resources(/)': 'resources',
             'resources/:uuid(/)': 'resource',
             'components/:uuid(/)': 'component',
+            'components/:uuid/:section(/)': 'component',
             'search(/)': 'search'
         },
 
@@ -138,12 +139,15 @@ require({
             app.main.show(view);
         },
 
-        component: function(uuid) {
+        component: function(uuid, section) {
             var view, model = origins.store.components.get(uuid);
+
+            section = section || 'summary';
 
             if (model) {
                 view = new origins.views.ComponentPage({
-                    model: model
+                    model: model,
+                    section: section
                 });
 
                 app.main.show(view);
@@ -163,7 +167,7 @@ require({
                 model.fetch()
                     .done(function() {
                         origins.store.components.add(model);
-                        _this.component(uuid);
+                        _this.component(uuid, section);
                     })
                     .error(function() {
                         _this.error({

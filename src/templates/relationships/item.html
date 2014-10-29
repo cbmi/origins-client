@@ -1,5 +1,17 @@
 <% if (data.outgoing) { %>
-<a href='/components/<%= data.end.uuid %>'><%= data.end.label %></a> <strong><%= data.type %></strong> <span class=text-muted>this component</span>
+    <span class=text-muted>This component</span>
+    <strong><%= data.label || data.type %></strong>
+    <% if (data.reference.resource.uuid !== data.end.resource.uuid) { %>
+        <a href='/resources/<%= data.end.resource.uuid %>/'><%= data.resource.label %></a>
+        <span class=text-muted>:</span>
+    <% } %>
+    <a href='/components/<%= data.end.uuid %>/'><%= data.end.label %></a>
 <% } else { %>
-    <span class=text-muted>This component</span> <strong><%= data.type %></strong> <a href='/components/<%= data.start.uuid %>'><%= data.start.label %></a>
+    <% if (data.reference.resource.uuid !== data.start.resource.uuid) { %>
+        <a href='/resources/<%= data.start.resource.uuid %>/'><%= data.resource.label %></a>
+        <span class=text-muted>:</span>
+    <% } %>
+    <a href='/components/<%= data.start.uuid %>/'><%= data.start.label %></a>
+    <strong><%= data.label || data.type %></strong>
+    <span class=text-muted>this component</span>
 <% } %>

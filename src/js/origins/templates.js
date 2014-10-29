@@ -20,6 +20,8 @@ define([
 
     'tpl!templates/components/item.html',
 
+    'tpl!templates/revision-item.html',
+
     // Pages
     'tpl!templates/pages/index.html',
     'tpl!templates/pages/error.html',

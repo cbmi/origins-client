@@ -24,4 +24,5 @@ define([
     _.extend(origins, Backbone.Events);
 
     return origins;
+
 });

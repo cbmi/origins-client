@@ -50,7 +50,7 @@ define([
 
     // Initializes instances to data linked by the model. The
     // URL function of the instance is set to use the model's
-    // corresponding URL in the `_links` attribute
+    // corresponding URL in the `links` attribute
     var bindLinkedData = function(model, mapping) {
         _.each(mapping, function(klass, key) {
             if (model[key]) {
@@ -97,6 +97,7 @@ define([
         constructor: function(attributes, options) {
             var attrs = attributes || {};
             options = options || {};
+            options.parse = true;
 
             this.cid = _.uniqueId('c');
             this.attributes = {};
@@ -132,7 +133,7 @@ define([
             bindLinkedData(this, _.result(this, 'linked'));
             bindNestedData(this, _.result(this, 'nested'));
 
-            this.initialize.apply(this, arguments);
+            this.initialize.call(this, attributes, options);
         },
 
         ensure: function(options) {
@@ -153,10 +154,13 @@ define([
     });
 
     var BaseCollection = Backbone.Collection.extend({
-        constructor: function() {
+        constructor: function(attrs, options) {
             this.fetched = false;
             this.fetching = false;
             this.fetchError = null;
+
+            options = options || {};
+            options.parse = true;
 
             this.on('request', function(collection, xhr) {
                 this._xhr = xhr;
@@ -179,7 +183,7 @@ define([
                 this.fetchError = resp;
             });
 
-            Backbone.Collection.prototype.constructor.apply(this, arguments);
+            Backbone.Collection.prototype.constructor.call(this, attrs, options);
         },
 
         ensure: function(options) {
@@ -357,10 +361,12 @@ define([
 
 
     var Search = BaseModel.extend({
-        initialize: function() {
+        constructor: function() {
             this.resources = new Resources();
             this.components = new Components();
             this.relationships = new Relationships();
+
+            BaseModel.prototype.constructor.apply(this, arguments);
         },
 
         url: function() {
@@ -392,15 +398,15 @@ define([
         parse: function(attrs) {
             var resources, components, relationships;
 
-            if (attrs.resources[1] === 200) {
+            if (attrs.resources && attrs.resources[1] === 200) {
                 resources = attrs.resources[0];
             }
 
-            if (attrs.components[1] === 200) {
+            if (attrs.components && attrs.components[1] === 200) {
                 components = attrs.components[0];
             }
 
-            if (attrs.relationships[1] === 200) {
+            if (attrs.relationships && attrs.relationships[1] === 200) {
                 relationships = attrs.relationships[0];
             }
 

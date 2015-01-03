@@ -124,6 +124,22 @@ define([
         }
     });
 
+    var Activity = Marionette.ItemView.extend({
+        template: templates.activity,
+
+        ui: {
+            type: '[name=type]',
+            startTime: '[name=start-time]',
+            endTime: '[name=end-time]'
+        },
+
+        onRender: function() {
+            this.ui.type.val(this.model.get('type') || '');
+            this.ui.startTime.val(this.model.get('startTime') || '');
+            this.ui.endTime.val(this.model.get('endTime') || '');
+        }
+    });
+
 
     var Properties = Marionette.ItemView.extend({
         template: templates.properties,
@@ -156,6 +172,34 @@ define([
             var properties = new Properties({
                 model: this.model
             });
+
+            var derivation = new Derivation({
+                model: this.model
+            });
+
+            var attribution = new Attribution({
+                model: this.model
+            });
+
+            var activity = new Activity({
+                model: this.model
+            });
+
+            var association = new Association({
+                model: this.model
+            });
+
+            var usage = new Usage({
+                model: this.model
+            });
+
+            this.getRegion('entity').show(entity);
+            this.getRegion('properties').show(properties);
+            this.getRegion('derivation').show(derivation);
+            this.getRegion('attribution').show(attribution);
+            this.getRegion('activity').show(activity);
+            this.getRegion('association').show(association);
+            this.getRegion('usage').show(usage);
         },
     });
 
@@ -184,7 +228,9 @@ define([
 
 
     return {
-        Form: Form
+        Form: Form,
+        MultiEntry: MultiEntry,
+        Layout: Layout
     };
 
 });

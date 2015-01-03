@@ -363,6 +363,8 @@ module.exports = function(grunt) {
                 ignores: [
                     '<%= srcDir %>/js/backbone.js',
                     '<%= srcDir %>/js/url-template.js',
+                    '<%= srcDir %>/js/bootstrap3-typeahead.js',
+                    '<%= srcDir %>/js/marked.js',
                     '<%= srcDir %>/js/bootstrap.js',
                     '<%= srcDir %>/js/jquery.js',
                     '<%= srcDir %>/js/loglevel.js',

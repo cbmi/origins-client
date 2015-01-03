@@ -114,6 +114,7 @@ define([
         },
 
         showPaths: function() {
+            /*
             this.model.paths.fetch();
 
             var view = new path.List({
@@ -121,6 +122,7 @@ define([
             });
 
             this.getRegion('content').show(view);
+            */
         }
     });
 

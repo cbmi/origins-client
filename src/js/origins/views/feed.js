@@ -72,19 +72,6 @@ define([
     };
 
 
-    var parseAgent = function(a) {
-        if (!a) return;
-
-        var label = parseLabel(a),
-            type = parseType(a);
-
-        return {
-            label: label,
-            type: type
-        };
-    };
-
-
     var parseGeneration = function(g) {
         if (!g) return;
 

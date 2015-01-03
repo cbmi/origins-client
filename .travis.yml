@@ -5,10 +5,14 @@ sudo: false
 node_js:
     - 0.10
 
+rvm:
+    - 1.9.2
+
 before_install:
     - bash bin/check_signoff.sh
 
 install:
+    - gem install sass
     - npm install -g grunt-cli
     - npm install
     - grunt jshint

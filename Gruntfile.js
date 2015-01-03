@@ -513,7 +513,7 @@ module.exports = function(grunt) {
     ]);
 
     grunt.registerTask('test', 'Runs the headless test suite', [
-        'copy:local',
+        'local',
         'serve:jasmine',
         'jasmine:local'
     ]);

@@ -6,7 +6,7 @@ node_js:
     - 0.10
 
 before_install:
-    - sh bin/check_signoff.sh
+    - bash bin/check_signoff.sh
 
 install:
     - npm install -g grunt-cli

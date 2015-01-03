@@ -78,25 +78,33 @@ module.exports = function(grunt) {
             local: {
                 files: [{
                     expand: true,
-                    cwd: '<%= srcDir %>',
-                    src: [
-                        'js/**/**.js',
-                        'css/**/*.css',
-                        'fonts/**/*',
-                        'img/**/*',
-                    ],
-                    dest: '<%= localDir %>',
+                    cwd: '<%= srcDir %>/js',
+                    src: '**/*',
+                    dest: '<%= localDir %>/js'
+                }, {
+                    expand: true,
+                    cwd: '<%= srcDir %>/css',
+                    src: '**/*',
+                    dest: '<%= localDir %>/css'
+                }, {
+                    expand: true,
+                    cwd: '<%= srcDir %>/img',
+                    src: '**/*',
+                    dest: '<%= localDir %>/img'
+                }, {
+                    expand: true,
+                    cwd: '<%= srcDir %>/fonts',
+                    src: '**/*',
+                    dest: '<%= localDir %>/fonts'
                 }, {
                     expand: true,
                     cwd: '<%= srcDir %>/html',
-                    src: ['**/*.html'],
+                    src: '**/*',
                     dest: '<%= localDir %>'
                 }, {
                     expand: true,
                     cwd: '<%= srcDir %>/templates',
-                    src: [
-                        '**/*.html'
-                    ],
+                    src: '**/*',
                     dest: '<%= localDir %>/js/templates'
                 }],
                 verbose: true
@@ -472,7 +480,6 @@ module.exports = function(grunt) {
 
     grunt.registerTask('local', 'Creates a build for local development and testing', [
         'sass:local',
-        //'copy:local',
         'sync:local',
         'jasmine:local:build'
     ]);

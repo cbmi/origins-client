@@ -1,13 +1,19 @@
 @import "bourbon/bourbon";
 
-body {
-    padding-top: 80px;
-    font-weight: 200;
-    font-size: 14px;
-}
+$spacing: 18px;
+$radius: 2px;
 
-p {
-    font-size: 14px;
+@import "_base";
+@import "_modal";
+@import "_input";
+@import "_header";
+@import "_timeline";
+@import "_listing";
+
+@mixin block {
+    background-color: #fff;
+    border-bottom: 1px solid #ddd;
+    border-right: 1px solid #ddd;
 }
 
 .spinner {
@@ -15,166 +21,139 @@ p {
 }
 
 #main {
-    margin: 0 20px;
+    margin: 0;
 }
 
-#origins-notifications {
-    position: fixed;
-    right: 10px;
-    top: 10px;
-    z-index: 1200;
-    font-size: 12px;
-
-    > .alert {
-        float: right;
-        width: 300px;
-        overflow: auto;
-
-        pre {
-            background: inherit;
-            border: none;
-            font-size: 12px;
-        }
-
-        &.alert-warning {
-            width: 500px;
-        }
-    }
+.block {
+    @include block;
 }
 
-header {
-    position: fixed;
-    z-index: 1000;
-    top: 0;
-    left: 0;
-    right: 0;
+.block-padding {
+    padding: $spacing;
+}
 
-    background-color: #fff;
-    border-bottom: 1px solid #ddd;
-    box-shadow: 0 1px 2px #eee;
+// Generic timesince element that displayed relative time
+.timesince {
+    font-size: 0.9em;
+    color: #777;
+}
 
-    a:link, a:visited {
-        color: #777;
-        text-decoration: none;
-        outline: none;
-    }
+// Generic item that has a title, description, meta, timesince
+.item {
+    @include clearfix;
 
-    a:hover, a:active {
-        color: #333;
-    }
-
-    .brand {
-        background-color: #f9f9f9;
-        border-right: 1px solid #ddd;
-        text-shadow: 0 1px 1px #fff;
-        display: inline-block;
+    .title {
         font-size: 16px;
         font-weight: 500;
-        padding: 15px;
+        line-height: 16px;
+        margin-bottom: $spacing;
     }
 
-    ul {
-        padding: 15px;
-        display: inline-block;
-        list-style: none;
-        margin: 0;
-
-        li {
-            display: inline-block;
-            margin-right: 10px;
-
-        }
-    }
-
-    input {
-        border: 1px solid #ccc;
-        border-radius: 3px;
-        padding: 3px 7px;
-        background-color: #f9f9f9;
-        width: 200px;
-
-        &:focus {
-            border: 1px solid #777;
-            box-shadow: 0 0 8px #ddd;
-            background-color: #fff;
-            outline: none;
-        }
-    }
-
-}
-
-.jumbotron {
-    background-color: #fff;
-}
-
-.item {
-    padding: 14px;
-    border: 1px solid #ddd;
-    border-radius: 3px;
-
-    margin-bottom: 14px;
-    font-size: 12px;
-    background-color: #fff;
-
-    > .item-heading {
-        h4 {
-            margin-top: 0;
-            display: inline;
-        }
-    }
-
-    > .item-content {
-        :first-child {
-            margin-top: 10px;
-        }
+    .description {
+        margin-bottom: $spacing;
 
         :last-child {
             margin-bottom: 0;
         }
     }
-}
 
-
-.breadcrumbs {
-    font-size: 12px;
-    padding: 0;
-    margin: 0;
-    list-style: none;
-
-    > * {
-        display: inline;
-
-        &:last-child i {
-            display: none;
-        }
-
-
-        i {
-            margin: 0 5px;
-        }
-    }
-}
-
-.page-info, .page-section {
-    border-bottom: 1px solid #ddd;
-    padding: 14px;
-    margin-bottom: 20px;
-
-    h2 {
-        margin: 0;
-    }
-
-    :first-child {
-        margin-top: 0;
-    }
-
-    :last-child {
+    .meta {
         margin-bottom: 0;
+        padding-left: 0;
+
+        font-size: 0.9em;
+        color: #777;
+
+        li {
+            display: inline-block;
+            margin-right: 5px;
+        }
+    }
+
+    &.item-entity {
+        .path {
+            margin-bottom: $spacing;
+            font-size: 0.9em;
+            color: #777;
+
+            > * {
+                display: inline-block;
+                margin-right: 5px;
+            }
+        }
     }
 }
 
-.nav-pills li a {
-    border-radius: 3px;
-    padding: 5px 10px;
+.data-type {
+    color: #777 !important;
+    font-size: 0.9em;
+    font-family: $monospace;
 }
 
+.page-header {
+    border: 0;
+    background: #fff;
+    border-bottom: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+    border-radius: $radius;
+    margin: 0 0 $spacing 0;
+    padding: $spacing;
+
+    .page-toolbar {
+        float: right;
+    }
+
+    .page-title {
+        font-size: 21px;
+        font-weight: 500;
+        line-height: 21px;
+    }
+}
+
+
+.page-section {
+    border: 0;
+    background: #fff;
+    border-bottom: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+    border-radius: $radius;
+    margin: $spacing 0;
+    padding: $spacing;
+}
+
+.properties-table {
+    th:first-child {
+        width: 150px;
+    }
+
+    font-family: monospace;
+
+    tbody {
+        font-size: 12px;
+    }
+}
+
+// Adjust radius and padding for pills
+.nav-pills li a {
+    border-radius: $radius;
+    padding: 5px 10px;
+    color: #555;
+}
+
+// Add support for a horizontal divider to form item groups
+.nav-stacked {
+    li.divider {
+        border-top: 1px solid #ddd;
+        margin: 7px 0;
+    }
+}
+
+// States
+.is-loading {
+    color: #777;
+    text-align: center;
+}
+
+.is-empty {
+    color: #777;
+}

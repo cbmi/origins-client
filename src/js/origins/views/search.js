@@ -1,13 +1,18 @@
 /* global define */
 
 define([
+    'jquery',
     'underscore',
     'backbone',
     'marionette',
-    './resources',
-    './components',
-    './relationships'
-], function(_, Backbone, Marionette, resources, components, relationships) {
+
+    '../app',
+    '../links',
+    '../deparam',
+    './entity',
+
+    'tpl!templates/search.html',
+], function($, _, Backbone, Marionette, app, links, deparam, entity, template) {
 
 
     /*
@@ -22,12 +27,11 @@ define([
     - '+origins:type="foo bar"
     */
 
-    /* jshint ignore:start */
-
-    var searchRegex = /(?:([+-])?(?:([^\s"']+|"[^"]+"|'[^']+')=)?([^\s"']+|"[^"]+"|'[^']+'))+/ig;
+    var searchRegex = /(?:([+-])?(?:([^\s"']+|"[^"]+"|'[^']+')=)?([^\s"']+|"[^"]+"|'[^']+'))+/ig;  // jshint ignore:line
 
     var parseInputString = function(text) {
-        var matches = [], match = searchRegex.exec(text);
+        var matches = [],
+            match = searchRegex.exec(text);
 
         while (match) {
             matches.push({
@@ -42,8 +46,6 @@ define([
         return matches;
     };
 
-    /* jshint ignore:end */
-
     var SearchInput = Marionette.View.extend({
         tagName: 'input',
 
@@ -56,24 +58,34 @@ define([
         },
 
         events: {
-            'input': '_handleChange',
-            'keypress': '_submit'
+            'input': '_handleInput',
+            'keypress': 'submit'
         },
 
         initialize: function() {
-            this._handleChange = _.debounce(this.handleChange, 400);
-            // Fire the first call and debounce all the rest
-            this._submit = _.debounce(this.submit, 400, true);
+            this._handleInput = _.debounce(this.handleInput, 400);
         },
 
-        handleChange: function(event) {
-            event.preventDefault();
-            this.trigger('search', this.el.value);
+        handleInput: function() {
+            var value = $.trim(this.el.value);
+
+            if (value) {
+                this.trigger('search', value);
+            }
         },
 
         submit: function(event) {
             if (event.which === 13) {
-                this.trigger('search', this.el.value);
+                this.handleInput();
+            }
+        },
+
+        onShow: function() {
+            // Focus the input
+            if (this.getOption('focus')) {
+                _.defer(function() {
+                    this.$el.focus();
+                }.bind(this));
             }
         },
 
@@ -86,81 +98,171 @@ define([
     });
 
 
-    var SearchPage = Marionette.LayoutView.extend({
-        template: 'pages/search',
+    // Results are just entities
+    var Results = entity.List.extend({
+        className: 'listing',
 
-        className: 'page',
+        options: {
+            emptyMessage: ''
+        }
+    });
+
+
+    var SearchPage = Marionette.LayoutView.extend({
+        template: template,
 
         ui: {
-            resourceCount: '[data-target=#search-resources]',
-            componentCount: '[data-target=#search-components]',
-            relationshipCount: '[data-target=#search-relationships]',
+            loader: '[data-target=loader]'
         },
 
         regions: {
-            resources: '[data-region=resources]',
-            components: '[data-region=components]',
-            relationships: '[data-region=relationships]'
+            search: '[data-region=search]',
+            results: '[data-region=results]'
+        },
+
+        options: {
+            scrollBuffer: 300
+        },
+
+        initialize: function() {
+            _.bindAll(this,
+                      'onScroll',
+                      'onFetchSuccess',
+                      'onFetchComplete',
+                      'onFetchError');
+
+            // Prevent scroll flickering
+            this._onScroll = _.debounce(this.onScroll, 100);
+        },
+
+        // Handles the window scroll event to trigger new results to be fetched
+        // dynamically for the current search.
+        onScroll: function(event) {
+            event.preventDefault();
+
+            // If something is already loading or no query is present, ignore
+            if (this.loading || !this.query) return;
+
+            var position = $(window).scrollTop(),
+                threshold = $(document).height() - $(window).height() -
+                            this.getOption('scrollBuffer');
+
+            if (position >= threshold) {
+                this.fetchNextPage();
+            }
         },
 
         onShow: function() {
-            this.bindCollection({
-                collection: this.model.resources,
-                element: this.ui.resourceCount,
-                single: 'resource',
-                plural: 'resources'
+            this.ui.loader.hide();
+
+            // Bind window for scrolling pagination.
+            $(window).on('scroll', this.onScroll);
+
+            var search = new SearchInput({focus: true});
+
+            // The 'search' event is triggered by the input which will cause
+            // the search results to be reset.
+            this.listenTo(search, 'search', this.onSearch);
+
+            var results = new Results({
+                collection: this.collection
             });
 
-            this.bindCollection({
-                collection: this.model.components,
-                element: this.ui.componentCount,
-                single: 'component',
-                plural: 'components'
-            });
+            this.getRegion('search').show(search);
+            this.getRegion('results').show(results);
 
-            this.bindCollection({
-                collection: this.model.relationships,
-                element: this.ui.relationshipCount,
-                single: 'relationship',
-                plural: 'relationships'
-            });
+            // Get current query parameter to pre-load search results
+            var query = document.location.search.slice(1),
+                params = deparam.parse(query);
 
-            var res = new resources.ResourceList({
-                collection: this.model.resources
-            });
-
-            var comps = new components.ComponentList({
-                collection: this.model.components
-            });
-
-            /*
-            var rel = new relationships.RelationshipList({
-                collection: this.model.relationships
-            });
-            */
-
-            this.resources.show(res);
-            this.components.show(comps);
-            //this.relationships.show(rel);
+            // Set the search input to the current query
+            if (params.query) {
+                search.set(params.query);
+            }
         },
 
-        bindCollection: function(options) {
-            var handler = function(collection) {
-                var text;
+        onBeforeDestroy: function() {
+            if (this.xhr) this.xhr.abort();
 
-                if (collection.length === 1) {
-                    text = '1 ' + options.single;
-                } else {
-                    text = collection.length + ' ' + options.plural;
-                }
+            $(window).off('scroll', this.onScroll);
+        },
 
-                options.element.text(text);
-            };
+        onSearch: function(query) {
+            if (this.query === query) return;
+            if (this.xhr) this.xhr.abort();
 
-            this.listenTo(options.collection, 'reset', handler);
+            this.query = query;
+            this.pageLinks = null;
+            this.collection.reset();
 
-            // Initialize
-            handler(options.collection);
+            var url = app.router.reverse('search');
+
+            if (this.query) {
+                url = url + '?' + $.param({query: query});
+                this.fetchFirstPage();
+            }
+
+            Backbone.history.navigate(url);
+        },
+
+        fetchNextPage: function() {
+            if (!this.pageLinks.next) return;
+
+            this.reset = false;
+
+            this.sendRequest({
+                url: this.pageLinks.next,
+                success: this.onFetchSuccess,
+                error: this.onFetchError,
+                complete: this.onFetchComplete
+            });
+        },
+
+        fetchFirstPage: function() {
+            this.reset = true;
+
+            var matches = parseInputString(this.query);
+
+            var data = $.param({
+                query: matches.map(function(m) {
+                    return m.value;
+                }),
+            }, true);
+
+            this.sendRequest({
+                url: _.result(this.collection, 'url'),
+                data: data,
+                success: this.onFetchSuccess,
+                error: this.onFetchError,
+                complete: this.onFetchComplete
+            });
+        },
+
+        sendRequest: function(options) {
+            this.loading = true;
+            this.ui.loader.show();
+
+            this.xhr = $.ajax(options);
+        },
+
+        onFetchSuccess: function(resp, status, xhr) {
+            this.pageLinks = links.parse(xhr).links;
+
+            if (this.reset) {
+                this.collection.reset(resp, {parse: true});
+            }
+            else {
+                this.collection.add(resp, {parse: true});
+            }
+        },
+
+        onFetchError: function() {
+
+        },
+
+        onFetchComplete: function() {
+            this.loading = false;
+            this.ui.loader.hide();
         }
     });
 

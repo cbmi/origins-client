@@ -1,0 +1,45 @@
+<div class='modal-dialog'>
+    <div class='modal-content'>
+
+        <div class='modal-header' data-region=header>
+            <h4 class='modal-title'>New Topology</h4>
+        </div>
+
+        <div class='modal-body' data-region=body>
+            <div class='alert alert-danger' data-target=error></div>
+
+            <form>
+                <div class=form-group>
+                    <label for=topology-account class='control-label'>Account</label>
+                    <select id=topology-account name=account class=form-control disabled>
+                        <option selected>Default</option>
+                    </select>
+                    <p class=help-block>The account to create this topology under.</p>
+                </div>
+
+                <div class=form-group>
+                    <label for=topology-label class='control-label'>Name</label>
+                    <input label=topology-label type=text name=label class=form-control autocomplete=off>
+                    <p class=help-block>Name of the topology.</p>
+                </div>
+
+                <div class=form-group>
+                    <label for=topology-id class='control-label'>Identifier</label>
+                    <input id=topology-id type=text name=id class=form-control autocomplete=off>
+                    <p class=help-block>Short URL-friendly identifier (auto-generated from the name).</p>
+                </div>
+
+                <div class=form-group>
+                    <label for=topology-description class='control-label'>Description</label> <span class=text-muted>(Optional)</span>
+                    <textarea id=topology-description type=text name=description class=form-control></textarea>
+                </div>
+            </form>
+        </div>
+
+        <div class='modal-footer' data-region=footer>
+            <button name=cancel class='btn btn-default'>Cancel</button>
+            <button name=primary class='btn btn-primary'>Create</button>
+        </div>
+
+    </div>
+</div>

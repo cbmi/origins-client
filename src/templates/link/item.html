@@ -1,0 +1,10 @@
+<% if (data.label) { %><h5><%= data.label %></h5><% } %>
+<% if (data.description) { %><p><%= data.description %></p><% } %>
+<%= data.type %> -
+<a href='<%= data.start.url %>'><%= data.start.label %></a>
+in
+<a href='<%= data.startResource.url %>'><%= data.startResource.label %></a>
+to
+<a href='<%= data.end.url %>'><%= data.end.label %></a>
+in
+<a href='<%= data.endResource.url %>'><%= data.endResource.label %></a>

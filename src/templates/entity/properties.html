@@ -1,0 +1,14 @@
+<thead>
+    <tr>
+        <th>Property</th>
+        <th>Value</th>
+    </tr>
+</thead>
+<tbody>
+    <% for (var key in data.properties) { %>
+    <tr>
+        <th><%= key %></th>
+        <td><%= data.properties[key] %></td>
+    </tr>
+    <% } %>
+</tbody>

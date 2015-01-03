@@ -1,0 +1,39 @@
+<% if (data.showTime) { %>
+    <div class='timesince pull-right'>
+        Updated <span data-target=timesince></span>
+    </div>
+<% } %>
+
+<div class=title>
+    <i class='fa fa-cube'></i>
+    <span class=data-type><%= data.type %></span>
+    <% if (data.showLink) { %>
+        <a href='<%= data.url %>'><%= data.label %></a>
+    <% } else { %>
+        <%= data.label %>
+    <% } %>
+</div>
+
+<% if (data.showPath && data.path) { %>
+    <div data-region=path title='Path'></div>
+<% } %>
+
+<% if (data.description) { %>
+    <div class=description><%= data.description %></div>
+<% } %>
+
+<ul class='meta'>
+    <% if (data.showResource) { %>
+        <li><i class='fa fa-cubes fa-fw'></i>
+            <a href='<%= data.resource.url %>'><%= data.resource.label %></a>
+        </li>
+    <% } %>
+
+    <li><i class='fa fa-link fa-fw'></i>
+        <% if (data.linkCount) { %>
+            <a href='<%= data.urls.links %>'><%= data.linkCount %> <%= data.linkLabel %></a>
+        <% } else { %>
+            <%= data.linkCount %> <%= data.linkLabel %>
+        <% } %>
+    </li>
+</ul>

@@ -1,0 +1,10 @@
+<% if (data.activity) { %>
+    <em><%= data.activity.label %></em>
+<% } %>
+
+<% if (data.entity) { %>
+    used
+    <a href='<%= data.entity.url %>'><%= data.entity.label %></a>
+<% } %>
+
+<span data-target=timesince></span>

@@ -1,0 +1,25 @@
+<div class=container-fluid>
+    <div class=row>
+        <div class='col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2'>
+
+            <div class=page-header data-region=header></div>
+
+            <div class=page-section>
+                <div class=row>
+                    <div class='col-xs-10 col-sm-10 col-md-10' data-region=content></div>
+
+                    <div class='col-xs-2 col-sm-2 col-md-2'>
+                        <ul class='nav nav-pills nav-stacked' data-target=nav>
+                            <li><a href='<%= data.url %>'><i class='fa fa-rss'></i> <span class='hidden-xs'>Feed</span></a></li>
+                            <li><a href='<%= data.urls.links %>'><i class='fa fa-link'></i> <span class='hidden-xs'>Links</span></a></li>
+                            <li><a href='<%= data.urls.properties %>'><i class='fa fa-table'></i> <span class='hidden-xs'>Properties</span></a></li>
+                            <li><a href='<%= data.urls.children %>'><i class='fa fa-sitemap'></i> <span class='hidden-xs'>Children</span></a></li>
+                            <li><a href='<%= data.urls.paths %>'><i class='fa fa-long-arrow-right'></i> <span class='hidden-xs'>Paths</span></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

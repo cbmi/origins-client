@@ -1,0 +1,12 @@
+<% if (data.trigger) { %>
+    <a href='<%= data.trigger.url %>'><%= data.trigger.label %></a>
+    ended
+<% } else { %>
+    Ended
+<% } %>
+
+<% if (data.activity) { %>
+    <em><%= data.activity.label %></em>
+<% } %>
+
+<span data-target=timesince></span>

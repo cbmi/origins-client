@@ -40,6 +40,8 @@ define([
     };
 
 
+    // Displays a 'time since' output given a date object. The display is
+    // updated relative to the smallest time interval.
     var TimeSince = Marionette.Behavior.extend({
         defaults: {
             selector: '[data-target=timesince]'
@@ -56,11 +58,11 @@ define([
         },
 
         onShow: function() {
-            this.renderTime();
-
-            // Render the actual date/time in the title
             var time = this.view.model.get('parsedTime');
-            this.ui.time.attr('title', time.toLocaleString());
+
+            if (!time) return;
+
+            this.renderTime();
         },
 
         onDestroy: function() {
@@ -69,16 +71,24 @@ define([
 
         renderTime: function() {
             var time = this.view.model.get('parsedTime');
+
             // Determine interval of time for update
             var out = getInterval(time);
+
             this.ui.time.text(timeSince(out[0], out[1]));
+
+            // Render the actual date/time in the title
+            this.ui.time.attr('title', time.toLocaleString());
 
             // Reset interval depending on the current unit of time.
             // For example, if the time is below one hour, the interval
             // if every minute.
             if (this.updateInterval !== out[1][0]) {
                 clearTimeout(this.interval);
-                this.updateInterval = out[1][0];
+
+                // Minimum interval is 60 seconds
+                this.updateInterval = Math.max(out[1][0], 60);
+
                 // Intervals take milliseconds
                 this.interval = setInterval(this.renderTime, this.updateInterval * 1000);
             }
@@ -86,8 +96,40 @@ define([
     });
 
 
+    // Binds a click event on an element to destroy a bound model on the view.
+    var DestroyItem = Marionette.Behavior.extend({
+        defaults: {
+            selector: '[data-action=destroy]',
+            wait: true,
+            success: null,
+            error: null
+        },
+
+        ui: function() {
+            return {
+                destroy: this.getOption('selector')
+            };
+        },
+
+        events: {
+            'click @ui.destroy': 'handleDestroy'
+        },
+
+        handleDestroy: function(event) {
+            event.preventDefault();
+
+            this.view.model.destroy({
+                wait: this.getOption('wait'),
+                success: this.getOption('success'),
+                error: this.getOption('error')
+            });
+        }
+    });
+
+
     var behaviors = {
-        TimeSince: TimeSince
+        TimeSince: TimeSince,
+        DestroyItem: DestroyItem
     };
 
 

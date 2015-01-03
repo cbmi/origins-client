@@ -1,18 +1,19 @@
 /* global define */
 
 define([
-    'underscore',
+    './utils',
     './views/behaviors',
     './views/base',
-    './views/search',
-    './views/pages',
-    './views/resources',
-    './views/collections',
-    './views/components'
-], function(_) {
+    './views/timeline',
+    './views/resource',
+    './views/topology',
+    './views/collection',
+    './views/entity',
+    './views/agent',
+    './views/link',
+    './views/properties'
+], function(utils) {
 
-    var mods = [].slice.call(arguments, 1);
-
-    return _.extend.apply(null, [{}].concat(mods));
+    return utils.exports(arguments, 1);
 
 });

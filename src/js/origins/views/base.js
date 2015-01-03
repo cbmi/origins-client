@@ -4,123 +4,68 @@ define([
     'underscore',
     'backbone',
     'marionette',
-], function(_, Backbone, Marionette) {
 
-    var LoadingView = Marionette.ItemView.extend({
-        template: 'loading',
+    'tpl!templates/message.html'
+], function(_, Backbone, Marionette, template) {
 
-        options: {
-            message: 'Loading...'
-        },
 
-        serializeData: function() {
-            return {
-                message: this.getOption('message')
-            };
-        }
-    });
+    var MessageView = Marionette.ItemView.extend({
+        template: template,
 
-    var EmptyView = Marionette.ItemView.extend({
-        template: 'empty',
-
-        options: {
-            message: 'Nothing to display'
-        },
-
-        serializeData: function() {
-            return {
-                message: this.getOption('message')
-            };
-        }
-    });
-
-    var ErrorView = Marionette.ItemView.extend({
-        template: 'error',
+        className: 'message',
 
         serializeData: function() {
             return {
                 header: this.getOption('header'),
                 message: this.getOption('message')
             };
-        }
-    });
+        },
 
-
-    var ErrorPage = Marionette.ItemView.extend({
-        template: 'pages/error',
-
-        serializeData: function() {
-            return {
-                header: this.getOption('header'),
-                message: this.getOption('message')
-            };
-        }
-    });
-
-
-    var ObjectNotFound = ErrorView.extend({
-        options: {
-            header: 'Object not found'
-        }
-    });
-
-
-    var NavigationError = ErrorView.extend({
-        options: {
-            header: 'Navigation error'
+        onRender: function() {
+            this.$el.addClass(this.getOption('stateClass'));
         }
     });
 
 
     var CollectionView = Marionette.CollectionView.extend({
         options: {
-            loadingMessage: 'Loading...',
-            emptyMessage: 'No data available',
-            errorMessage: 'Error loading data'
+            loadingHeader: '',
+            loadingMessage: '<i class="fa fa-circle-o-notch fa-spin"></i>',
+            emptyHeader: 'No data available.',
+            emptyMessage: ''
         },
 
-        getEmptyView: function() {
-            if (this.collection) {
-                if (this.collection.fetchError) {
-                    return ErrorView;
-                }
-                else if (this.collection.fetching) {
-                    return LoadingView;
-                }
-            }
-
-            return EmptyView;
-        },
+        emptyView: MessageView,
 
         emptyViewOptions: function() {
-            if (this.collection) {
-                if (this.collection.fetchError) {
-                    return {
-                        message: this.getOption('errorMessage')
-                    };
-                }
-                else if (this.collection.fetching) {
-                    return {
-                        message: this.getOption('loadingMessage')
-                    };
-                }
+            if (this.collection.fetching) {
+                return {
+                    stateClass: 'is-loading',
+                    header: this.getOption('loadingHeader'),
+                    message: this.getOption('loadingMessage')
+                };
             }
 
             return {
+                stateClass: 'is-empty',
+                header: this.getOption('emptyHeader'),
                 message: this.getOption('emptyMessage')
             };
         }
     });
 
 
+    var CompositeView = Marionette.CompositeView.extend();
+
+    CompositeView.prototype.options = CollectionView.prototype.options;
+    CompositeView.prototype.getEmptyView = CollectionView.prototype.getEmptyView;
+    CompositeView.prototype.emptyViewOptions = CollectionView.prototype.emptyViewOptions;
+
+
     return {
-        LoadingView: LoadingView,
-        EmptyView: EmptyView,
-        ErrorView: ErrorView,
-        ErrorPage: ErrorPage,
-        ObjectNotFound: ObjectNotFound,
-        NavigationError: NavigationError,
-        CollectionView: CollectionView
+        MessageView: MessageView,
+        CollectionView: CollectionView,
+        CompositeView: CompositeView
     };
 
 });

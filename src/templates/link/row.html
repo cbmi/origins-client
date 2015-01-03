@@ -1,0 +1,26 @@
+<td data-region=source>
+    <span class=data-type><%= data.start.type %></span>
+    <a href='<%= data.start.url %>'><%= data.start.label %></a><br>
+    <small class=text-muted>
+        <i class='fa fa-cubes'></i>
+        <a href='<%= data.start.resource.url %>'><%= data.start.resource.label %></a>
+    </small>
+</td>
+
+<td>
+    <i class='fa fa-2x fa-long-arrow-right'></i>
+    <% if (data.type) { %>
+    <br><%= data.type %>
+    <% } %>
+</td>
+
+<td data-region=target>
+    <span class=data-type><%= data.end.type %></span>
+    <a href='<%= data.end.url %>'><%= data.end.label %></a><br>
+    <small class=text-muted>
+        <i class='fa fa-cubes'></i>
+        <a href='<%= data.end.resource.url %>'><%= data.end.resource.label %></a>
+    </small>
+</td>
+
+<td class=timesince data-target=timesince></td>

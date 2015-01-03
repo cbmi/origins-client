@@ -12,20 +12,26 @@
         <link rel=stylesheet href='/css/origins.css'>
     </head>
     <body>
-        <header>
-            <a class=brand tabindex=-1 href='/'>Origins</a>
+        <header id=header>
+            <a class=brand tabindex=-1 href='/'>ORIGINS</a>
 
-            <ul class='header-nav'>
-                <li><a href='/collections/' tabindex=-1 title='Browse collections'><i class='fa fa-archive'></i> <span class='hidden-xs'>Collections</span></a></li>
-                <li><a href='/resources/' tabindex=-1 title='Browse resources'><i class='fa fa-cubes'></i> <span class='hidden-xs'>Resources</span></a></li>
+            <ul>
+                <li><a href='/resources/' title='Resources'><i class='fa fa-cubes'></i> <span class='hidden-xs'>Resources</span></a></li>
+                <li><a href='/topologies/' title='Topologies'><i class='fa fa-share-alt fa-rotate'></i> <span class='hidden-xs'>Topologies</span></a></li>
+                <li><a href='/search/' title='Search'><i class='fa fa-search'></i> <span class='hidden-xs'>Search</span></a></li>
             </ul>
 
-            <input id=search type=search tabindex=0 placeholder='Search...' autocomplete=off title='Search resources, components, and relationships'>
+            <ul class='pull-right'>
+                <li><a href='/signin/' title='Signin'><i class='fa fa-sign-in'></i> <span class='hidden-xs'>Signin</span></a></li>
+            </ul>
         </header>
 
-        <div id='main'>
+        <main id=main>
             <div class='spinner'><i class='fa fa-circle-o-notch fa-spin'></i></div>
-        </div>
+        </main>
+
+        <footer id=footer>
+        </footer>
 
         <script>
             var require = {
@@ -34,13 +40,10 @@
 
                 origins = {
                     debug: true,
-                    history: {
-                        pushState: true
-                    },
-                    api: 'http://localhost:5000'
+                    endpoint: 'http://localhost:5000'
                 };
         </script>
 
-        <script data-main='origins/main' src='/js/require.js'></script>
+        <script data-main='origins' src='/js/require.js'></script>
     </body>
 </html>

@@ -1,0 +1,31 @@
+<div class='timesince pull-right'>Updated <span data-target=timesince></span></div>
+
+<div class=title>
+    <i class='fa fa-cubes'></i>
+    <% if (data.showLink) { %>
+        <a href='<%= data.url %>'><%= data.label %></a>
+    <% } else { %>
+        <%= data.label %>
+    <% } %>
+</div>
+
+<% if (data.description) { %>
+    <div class=description><%= data.description %></div>
+<% } %>
+
+<ul class='meta'>
+    <li><i class='fa fa-cube fa-fw'></i>
+
+    <% if (data.entityCount) { %>
+        <a href='<%= data.urls.entities %>'><%= data.entityCount %> <%= data.entityLabel %></a>
+    <% } else { %>
+        <%= data.entityCount %> <%= data.entityLabel %>
+    <% } %></li>
+
+    <li><i class='fa fa-link fa-fw'></i>
+    <% if (data.linkCount) { %>
+        <a href='<%= data.urls.links %>'><%= data.linkCount %> <%= data.linkLabel %></a>
+    <% } else { %>
+        <%= data.linkCount %> <%= data.linkLabel %>
+    <% } %></li>
+</ul>

@@ -1,0 +1,35 @@
+<div class=icon>
+    <% if (data.derivation) { %>
+        <% if (data.derivation.type === 'prov:Revision') { %>
+            <i class='fa fa-refresh fa-fw text-primary' title=Revision></i>
+        <% } else { %>
+            <i class='fa fa-copy fa-fw text-muted' title=Derivation></i>
+        <% } %>
+    <% } else { %>
+        <i class='fa fa-plus-circle fa-fw text-success' title=Generation></i>
+    <% } %>
+</div>
+
+<div class=content>
+    <p class=time data-target=timesince></p>
+
+    <% if (data.entity) { %>
+        <span class=data-type><%= data.entity.type %></span>
+        <a href='<%= data.entity.url %>'><%= data.entity.label || data.entity.uuid %></a>
+    <% } %>
+
+    <ul class=details>
+        <% if (data.generation.time) { %>
+            <li><%= data.generation.time.toDateString() %> at <%= data.generation.time.toLocaleTimeString() %></li>
+        <% } %>
+
+        <% if (data.derivation && data.derivation.type !== 'prov:Revision') { %>
+            <li>Derived from <a href='<%= data.usedEntity.url %>'><%= data.usedEntity.label %></a></li>
+        <% } %>
+
+        <% if (data.associations) { %>
+            <li><% _.forEach(data.associations, function(a) { %>
+            <span><%= a.agent %> <% if (a.role) { %> as <%= a.role %> <% } %></span>
+        <% })} %>
+    </ul>
+</div>

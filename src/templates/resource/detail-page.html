@@ -1,0 +1,30 @@
+<div class=container-fluid>
+    <div class=row>
+        <div class='col-md-8 col-md-offset-2'>
+            <div class=page-header data-region=header></div>
+
+            <div class=page-section>
+                <div class=row>
+
+                    <div class='col-md-10' data-region=content></div>
+
+                    <div class='col-md-2'>
+                        <ul class='nav nav-pills nav-stacked' data-target=nav>
+                            <li><a href='<%= data.url %>'><i class='fa fa-rss'></i> Feed</a></li>
+                            <li><a href='<%= data.urls.links %>'><i class='fa fa-link'></i> Links
+                                <% if (data.brokenLinkCount) { %>
+                                    <span class='badge badge-error'><%= data.brokenLinkCount %></span>
+                                <% } %></a></li>
+                            <li><a href='<%= data.urls.paths %>'><i class='fa fa-long-arrow-right'></i> Paths</a></li>
+                            <li><a href='<%= data.urls.entities %>'><i class='fa fa-cube'></i> Entities</a></li>
+                            <li class=divider></li>
+                            <li><a href='<%= data.urls.importer %>'><i class='fa fa-cloud'></i> Importer</a></li>
+                            <li><a href='<%= data.urls.settings %>'><i class='fa fa-cog'></i> Settings</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

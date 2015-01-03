@@ -1,0 +1,23 @@
+<div class=icon>
+    <i class='fa fa-minus-circle fa-fw text-danger'></i>
+</div>
+
+<div class=content>
+    <p class=time data-target=timesince></p>
+
+    <% if (data.entity) { %>
+        <span class=data-type><%= data.entity.type %>:</span>
+        <a href='<%= data.entity.url %>'><%= data.entity.label || data.entity.uuid %></a>
+    <% } %>
+
+    <ul class=details>
+        <% if (data.invalidation.time) { %>
+            <li><%= data.invalidation.time.toDateString() %> at <%= data.invalidation.time.toLocaleTimeString() %></li>
+        <% } %>
+
+        <% if (data.associations) { %>
+            <li><% _.forEach(data.associations, function(a) { %>
+            <span><%= a.agent %> <% if (a.role) { %> as <%= a.role %> <% } %></span>
+        <% })} %>
+    </ul>
+</div>

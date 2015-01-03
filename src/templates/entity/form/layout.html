@@ -1,0 +1,124 @@
+<div class=modal-dialog>
+    <div class=modal-content>
+        <div class=modal-header>
+            <h4 class=modal-title>New Entity</h4>
+        </div>
+
+        <div class=modal-body>
+            <div class='form-group'>
+                <label>Name or label of this entity</label>
+                <input class='form-control' name=label type=text>
+                <p class=help-block>Short name or label of this entity.</p>
+            </div>
+
+            <div class='form-group'>
+                <label>Free-text description of this entity</label>
+                <textarea class='form-control' name=description></textarea>
+                <p class=help-block>Longer description of the entity.</p>
+            </div>
+
+            <div class='form-group'>
+                <label>What type of entity is this?</label>
+                <input class='form-control' name=type type=text>
+                <p class=help-block>This should be one or two words denoting the type,
+                    such as "Idea", "Field", "Paper", "SQL Query".</p>
+            </div>
+
+            <div class='form-group'>
+                <label>When was this entity created?</label>
+                <input class='form-control' name=created type=text>
+                <p class=help-block>The date/time should be precise as possible.</p>
+            </div>
+
+            <div class='form-group'>
+                <label>Attributes of the entity</label>
+
+                <div class=row>
+                    <div class=col-md-6>
+                        <span>Attribute</span>
+                        <input class='form-control' name=attribute-key placeholder=Attribute>
+                    </div>
+
+                    <div class=col-md-6>
+                        <span>Value</span>
+                        <input class='form-control' name=attribute-value placeholder=Value>
+                    </div>
+                </div>
+
+                <p class=help-block>Key/value pairs of this entity, such as "color => blue", "size => 3 inches".</p>
+            </div>
+
+            <hr>
+
+
+            <div class='form-group'>
+                <label>Was the entity derived from something else?</label>
+                <input class='form-control' name=derivation type=text>
+                <p class=help-block>Is it a quotation or a subset of data?</p>
+            </div>
+
+            <div class='form-group'>
+                <label>Who should receive attribution for this entity?</label>
+                <div class=row>
+                    <div class=col-md-6>
+                        <span>Agent name</span>
+                        <input class='form-control' name=attribution-agent placeholder=Agent>
+                    </div>
+
+                    <div class=col-md-6>
+                        <span>Type of attribution</span>
+                        <input class='form-control' name=attribution-type placeholder=Type>
+                    </div>
+                </div>
+
+                <p class='help-block'>This could be people, services, organizations, etc.</p>
+            </div>
+
+            <div class='form-group'>
+                <label>What activity/action resulted in this entity being created/produced?</label>
+                <input class='form-control' name=activity type=text>
+                <p class='help-block'>Such as a meeting, database query, walk in the park, etc.</p>
+            </div>
+
+            <div class='form-group'>
+                <label>Who were involved in this activity?</label>
+
+                <div class=row>
+                    <div class=col-md-6>
+                        <span>Agent name or description</span>
+                        <input class='form-control' name=association-agent placeholder=Agent>
+                    </div>
+                    <div class=col-md-6>
+                        <span>The agent's role</span>
+                        <input class='form-control' name=association-role placeholder=Role>
+                    </div>
+                </div>
+
+                <p class=help-block>For example, a project manager, contributor, reviewer, etc.</p>
+            </div>
+
+            <div class='form-group'>
+                <label>Was anything else used to complete this activity?</label>
+
+                <div class=row>
+                    <div class=col-md-6>
+                        <span>Used entity</span>
+                        <input class='form-control' name=usage-entity type=text placeholder=Entity>
+                    </div>
+
+                    <div class=col-md-6>
+                        <span>How it was used</span>
+                        <input class='form-control' name=usage-type placeholder=Type>
+                    </div>
+                </div>
+
+                <p class=help-block>Such as hardware, algorithms, data, etc.</p>
+            </div>
+        </div>
+
+        <div class=modal-footer>
+            <button type=button class='btn btn-default' data-action=cancel>Cancel</button>
+            <button type=button class='btn btn-primary' data-action=save>Save</button>
+        </div>
+    </div>
+</div>

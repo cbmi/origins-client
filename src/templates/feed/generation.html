@@ -28,8 +28,11 @@
         <% } %>
 
         <% if (data.associations) { %>
-            <li><% _.forEach(data.associations, function(a) { %>
-            <span><%= a.agent %> <% if (a.role) { %> as <%= a.role %> <% } %></span>
-        <% })} %>
+        <li>
+            <% _.forEach(data.associations, function(a) { %>
+                <span><%= a.agent %> <% if (a.role) { %> as <%= a.role %> <% } %></span>
+            <% }) %>
+        </li>
+        <% } %>
     </ul>
 </div>

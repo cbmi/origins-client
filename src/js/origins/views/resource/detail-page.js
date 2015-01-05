@@ -42,7 +42,11 @@ define([
 
         onShow: function() {
             var list = new entity.List({
-                collection: this.model.entities
+                collection: this.model.entities,
+                // Hide resource since this *is* the resource page
+                childViewOptions: {
+                    resource: false
+                }
             });
 
             //var modal = new entity.Form({

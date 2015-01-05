@@ -37,7 +37,7 @@ define([
 
         regions: {
             list: '[data-region=list]',
-            modal: '[data-region=modal]'
+            //modal: '[data-region=modal]'
         },
 
         onShow: function() {
@@ -45,12 +45,12 @@ define([
                 collection: this.model.entities
             });
 
-            var modal = new entity.Form({
-                model: this.model
-            });
+            //var modal = new entity.Form({
+            //    model: this.model
+            //});
 
             this.getRegion('list').show(list);
-            this.getRegion('modal').show(modal);
+            //this.getRegion('modal').show(modal);
         },
 
         showModal: function() {

@@ -1,11 +1,12 @@
 /* global define */
 
 define([
-    '../views/index',
+    'react',
+    '../components/index',
     '../views/search',
     '../models',
     './core'
-], function(index, search, models, core) {
+], function(React, index, search, models, core) {
 
     var Router = core.Router.extend({
         routes: {
@@ -17,9 +18,9 @@ define([
         index: function() {
             this.setTitle('');
 
-            var view = new index.IndexPage();
+            var main = this.app.getRegion('main');
 
-            this.app.getRegion('main').show(view);
+            React.render(index.IndexPage(), main.$el[0]);
         },
 
         search: function() {

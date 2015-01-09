@@ -79,7 +79,7 @@ module.exports = function(grunt) {
                 files: [{
                     expand: true,
                     cwd: '<%= srcDir %>/js',
-                    src: '**/*',
+                    src: '**/*.js',
                     dest: '<%= localDir %>/js'
                 }, {
                     expand: true,
@@ -127,6 +127,10 @@ module.exports = function(grunt) {
             sass: {
                 tasks: ['sass:local'],
                 files: ['<%= srcDir %>/scss/**/*']
+            },
+            react: {
+                tasks: ['react:local'],
+                files: ['<%= srcDir %>/js/**/*.jsx']
             }
         },
 
@@ -372,10 +376,24 @@ module.exports = function(grunt) {
                     '<%= srcDir %>/js/require.js',
                     '<%= srcDir %>/js/text.js',
                     '<%= srcDir %>/js/tpl.js',
-                    '<%= srcDir %>/js/underscore.js'
+                    '<%= srcDir %>/js/underscore.js',
+                    '<%= srcDir %>/js/react.js',
+                    '<%= srcDir %>/js/flux.js'
                 ]
             },
-            src: ['<%= srcDir %>/js/**/**/**/**/*.js']
+            src: ['<%= srcDir %>/js/**/*.js']
+        },
+
+        react: {
+            local: {
+                files: [{
+                    expand: true,
+                    cwd: '<%= srcDir %>/js/',
+                    src: ['**/*.jsx'],
+                    dest: 'local/js',
+                    ext: '.js'
+                }]
+            }
         }
     });
 
@@ -388,6 +406,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-amdcheck');
     grunt.loadNpmTasks('grunt-sync');
+    grunt.loadNpmTasks('grunt-react');
 
     grunt.registerMultiTask('serve', 'Run a Node server for testing', function() {
         var http = require('http'),
@@ -482,6 +501,7 @@ module.exports = function(grunt) {
 
     grunt.registerTask('local', 'Creates a build for local development and testing', [
         'sass:local',
+        'react:local',
         'sync:local',
         'jasmine:local:build'
     ]);

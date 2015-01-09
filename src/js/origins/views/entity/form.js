@@ -5,7 +5,6 @@ define([
     '../../utils',
 
     'tpl!templates/multi-entry.html',
-    'tpl!templates/entity/form.html',
     'tpl!templates/entity/form/layout.html',
     'tpl!templates/entity/form/entity.html',
     'tpl!templates/entity/form/derivation.html',
@@ -17,7 +16,6 @@ define([
 
     var templates = utils.templates([
         'multi',
-        'form',
         'layout',
         'entity',
         'derivation',

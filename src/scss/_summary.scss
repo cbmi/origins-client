@@ -1,0 +1,43 @@
+.toc {
+    > :first-child {
+        margin-top: 0;
+    }
+
+    // Do not indent first level.
+    > ul {
+        padding-left: 0;
+        list-style: none;
+    }
+}
+
+.section {
+    margin-top: 30px;
+}
+
+.section-attrs {
+    border-top: 1px solid #ddd;
+    padding: 5px;
+}
+
+.section .section-attrs:last-child {
+    border-bottom: 1px solid #ddd;
+}
+
+.section-attrs .timesince {
+    text-align: right;
+    float: right;
+}
+
+.section-description {
+    p {
+        font-size: 0.9em;
+    }
+
+    > :first-child {
+        margin-top: 5px;
+    }
+
+    > :last-child {
+        margin-bottom: 0;
+    }
+}

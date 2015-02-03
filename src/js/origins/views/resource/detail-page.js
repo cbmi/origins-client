@@ -3,6 +3,7 @@
 define([
     'marionette',
     'marked',
+    'react',
 
     '../../app',
     '../../utils',
@@ -13,9 +14,11 @@ define([
     './item',
     './settings',
 
+    '../../components/resource/entity-summary',
+
     'tpl!templates/resource/detail-page.html',
-    'tpl!templates/resource/entities.html',
-], function(Marionette, marked, app, utils, base, entity, feed, link, item, settings) {
+    'tpl!templates/resource/entities.html'
+], function(Marionette, marked, React, app, utils, base, entity, feed, link, item, settings, EntitySummary) {
 
 
     var templates = utils.templates([
@@ -80,7 +83,8 @@ define([
         },
 
         sections: {
-            index: 'showFeed',
+            index: 'showSummary',
+            feed: 'showFeed',
             links: 'showLinks',
             paths: 'showPaths',
             entities: 'showEntities',
@@ -93,12 +97,12 @@ define([
 
             return {
                 urls: {
+                    feed: app.router.reverse('resource.feed', attrs),
                     links: app.router.reverse('resource.links', attrs),
                     paths: app.router.reverse('resource.paths', attrs),
                     settings: app.router.reverse('resource.settings', attrs),
                     importer: app.router.reverse('resource.importer', attrs),
-                    entities: app.router.reverse('resource.entities', attrs),
-                    feed: app.router.reverse('resource.feed', attrs)
+                    entities: app.router.reverse('resource.entities', attrs)
                 }
             };
         },
@@ -122,6 +126,18 @@ define([
             });
 
             this.getRegion('header').show(header);
+        },
+
+        showSummary: function() {
+            this.model.entities.fetch().done(function() {
+
+                var region = this.getRegion('content');
+                region._ensureElement();
+
+                React.render(EntitySummary({
+                    items: this.model.entities.map(function(m) {return m.attributes;})
+                }), region.$el[0]);
+            }.bind(this));
         },
 
         showLinks: function() {

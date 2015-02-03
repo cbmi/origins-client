@@ -172,8 +172,8 @@ define([
                 label: this.ui.label.val() || null,
                 description: this.ui.description.val() || null,
                 type: this.ui.type.val() || null,
-                start: this.startInput.itemId,
-                end: this.endInput.itemId
+                start: this.startInput.itemId || this.ui.start.val(),
+                end: this.endInput.itemId || this.ui.end.val()
             };
 
             var options = {

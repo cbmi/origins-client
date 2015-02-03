@@ -39,7 +39,8 @@ define([
 
         // Navigate will return false if the path does not match a route,
         // true if it does and undefined if the path is the current page.
-        if (cancel !== false) {
+        // Ensure the hash is not different so jumping to anchors are not broken.
+        if (cancel === true || (cancel === undefined && location.hash === this.hash)) {
             event.preventDefault();
         }
     };

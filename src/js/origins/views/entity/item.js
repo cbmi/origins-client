@@ -20,7 +20,8 @@ define([
             time: true,
             resource: true,
             path: true,
-            link: true
+            link: true,
+            uuid: true
         },
 
         behaviors: {
@@ -36,7 +37,8 @@ define([
                 showTime: this.getOption('time'),
                 showLink: this.getOption('link'),
                 showResource: this.getOption('resource'),
-                showPath: this.getOption('path')
+                showPath: this.getOption('path'),
+                showUUID: this.getOption('uuid')
             };
         },
 

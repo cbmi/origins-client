@@ -24,16 +24,22 @@
 
 <ul class='meta'>
     <% if (data.showResource) { %>
-        <li><i class='fa fa-cubes fa-fw'></i>
+        <li><i class='fa fa-fw fa-cubes'></i>
             <a href='<%= data.resource.url %>'><%= data.resource.label %></a>
         </li>
     <% } %>
 
-    <li><i class='fa fa-link fa-fw'></i>
+    <li><i class='fa fa-fw fa-link'></i>
         <% if (data.linkCount) { %>
             <a href='<%= data.urls.links %>'><%= data.linkCount %> <%= data.linkLabel %></a>
         <% } else { %>
             <%= data.linkCount %> <%= data.linkLabel %>
         <% } %>
     </li>
+
+    <% if (data.showUUID) { %>
+        <li><i class='fa fa-fw fa-barcode'></i>
+            <span class=text-muted><%= data.uuid %></span>
+        </li>
+    <% } %>
 </ul>

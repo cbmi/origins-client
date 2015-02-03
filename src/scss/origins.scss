@@ -69,18 +69,15 @@ $radius: 2px;
             margin-right: 5px;
         }
     }
+}
 
-    &.item-entity {
-        .path {
-            margin-bottom: $spacing;
-            font-size: 0.9em;
-            color: #777;
+.path {
+    margin-bottom: $spacing;
+    color: #777;
 
-            > * {
-                display: inline-block;
-                margin-right: 5px;
-            }
-        }
+    > * {
+        display: inline-block;
+        margin-right: 5px;
     }
 }
 
@@ -109,7 +106,6 @@ $radius: 2px;
         line-height: 21px;
     }
 }
-
 
 .page-section {
     border: 0;

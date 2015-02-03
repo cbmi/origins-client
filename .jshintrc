@@ -11,5 +11,9 @@
     "maxdepth": 3,
     "maxlen": 90,
     "browser": true,
-    "eqeqeq": true
+    "eqeqeq": true,
+    "globals": {
+        "define": true,
+        "require": true
+    }
 }

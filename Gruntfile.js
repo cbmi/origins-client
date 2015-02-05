@@ -390,7 +390,17 @@ module.exports = function(grunt) {
                     expand: true,
                     cwd: '<%= srcDir %>/js/',
                     src: ['**/*.jsx'],
-                    dest: 'local/js',
+                    dest: '<%= localDir %>/js',
+                    ext: '.js'
+                }]
+            },
+
+            build: {
+                files: [{
+                    expand: true,
+                    cwd: '<%= srcDir %>/js/',
+                    src: ['**/*.jsx'],
+                    dest: '<%= buildDir %>/js',
                     ext: '.js'
                 }]
             }
@@ -509,6 +519,7 @@ module.exports = function(grunt) {
     grunt.registerTask('dist', 'Creates a build for distribution', [
         'clean:build',
         'copy:build',
+        'react:build',
         'clean:dist',
         'requirejs:dist',
         'sass:dist',

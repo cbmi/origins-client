@@ -1,6 +1,5 @@
 *.DS_Store
 *.sw?
-*.py?
 *.tar.gz
 *.zip
 .grunt

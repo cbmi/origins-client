@@ -37,9 +37,11 @@ module.exports = function(grunt) {
         'jquery',
         'backbone',
         'underscore',
-        'marionette',
+        'backbone.marionette',
         'bootstrap',
-        'loglevel'
+        'loglevel',
+        'react',
+        'flux'
     ];
 
     grunt.initConfig({
@@ -51,6 +53,7 @@ module.exports = function(grunt) {
         buildDir: 'build',
         distDir: 'dist',
         cdnDir: 'cdn',
+        bowerDir: 'bower_components',
 
         serve: {
             local: {
@@ -74,51 +77,17 @@ module.exports = function(grunt) {
             }
         },
 
-        sync: {
-            local: {
-                files: [{
-                    expand: true,
-                    cwd: '<%= srcDir %>/js',
-                    src: '**/*.js',
-                    dest: '<%= localDir %>/js'
-                }, {
-                    expand: true,
-                    cwd: '<%= srcDir %>/css',
-                    src: '**/*',
-                    dest: '<%= localDir %>/css'
-                }, {
-                    expand: true,
-                    cwd: '<%= srcDir %>/img',
-                    src: '**/*',
-                    dest: '<%= localDir %>/img'
-                }, {
-                    expand: true,
-                    cwd: '<%= srcDir %>/fonts',
-                    src: '**/*',
-                    dest: '<%= localDir %>/fonts'
-                }, {
-                    expand: true,
-                    cwd: '<%= srcDir %>/html',
-                    src: '**/*',
-                    dest: '<%= localDir %>'
-                }, {
-                    expand: true,
-                    cwd: '<%= srcDir %>/templates',
-                    src: '**/*',
-                    dest: '<%= localDir %>/js/templates'
-                }],
-                verbose: true
-            }
-        },
-
         watch: {
             grunt: {
                 tasks: ['local'],
                 files: ['Gruntfile.js']
             },
-            src: {
+            local: {
                 tasks: ['sync:local'],
-                files: ['<%= srcDir %>/**/*']
+                files: [
+                    '<%= srcDir %>/**/*',
+                    '<%= bowerDir %>/**/*'
+                ]
             },
             tests: {
                 tasks: ['jasmine:local:build'],
@@ -131,6 +100,64 @@ module.exports = function(grunt) {
             react: {
                 tasks: ['react:local'],
                 files: ['<%= srcDir %>/js/**/*.jsx']
+            }
+        },
+
+        sync: {
+            local: {
+                files: [{
+                    expand: true,
+                    flatten: true,
+                    cwd: '<%= bowerDir %>',
+                    src: [
+                        'bootstrap/dist/js/bootstrap.js',
+                        'bootstrap3-typeahead/bootstrap3-typeahead.js',
+                        'backbone/backbone.js',
+                        'flux/dist/Flux.js',
+                        'jquery/dist/jquery.js',
+                        'loglevel/dist/loglevel.js',
+                        'marionette/lib/backbone.marionette.js',
+                        'marked/lib/marked.js',
+                        'react/react.js',
+                        'requirejs/require.js',
+                        'requirejs-text/text.js',
+                        'underscore/underscore.js',
+                        'url-template/lib/url-template.js'
+                    ],
+                    dest: '<%= localDir %>/js'
+                }, {
+                    expand: true,
+                    flatten: true,
+                    cwd: '<%= bowerDir %>',
+                    src: [
+                        'fontawesome/css/font-awesome.css',
+                        'bootstrap/dist/css/bootstrap.css'
+                    ],
+                    dest: '<%= localDir %>/css'
+                }, {
+                    expand: true,
+                    flatten: true,
+                    cwd: '<%= bowerDir %>',
+                    src: [
+                        'fontawesome/fonts/*'
+                    ],
+                    dest: '<%= localDir %>/fonts'
+                }, {
+                    expand: true,
+                    cwd: '<%= srcDir %>/js',
+                    src: '**/*.js',
+                    dest: '<%= localDir %>/js'
+                }, {
+                    expand: true,
+                    cwd: '<%= srcDir %>/html',
+                    src: '**/*',
+                    dest: '<%= localDir %>'
+                }, {
+                    expand: true,
+                    cwd: '<%= srcDir %>/templates',
+                    src: '**/*',
+                    dest: '<%= localDir %>/js/templates'
+                }]
             }
         },
 
@@ -170,76 +197,90 @@ module.exports = function(grunt) {
 
         copy: {
             local: {
-                files: [
-                    {
-                        expand: true,
-                        src: ['bower.json', 'package.json'],
-                        dest: '<%= localDir %>'
-                    }
-                ]
+                files: [{
+                    expand: true,
+                    src: ['bower.json', 'package.json'],
+                    dest: '<%= localDir %>'
+                }]
             },
 
             build: {
-                files: [
-                    {
-                        expand: true,
-                        cwd: '<%= srcDir %>/templates',
-                        src: ['**/*'],
-                        dest: '<%= buildDir %>/js/templates'
-                    }, {
-                        expand: true,
-                        cwd: '<%= srcDir %>/js',
-                        src: ['**/*'],
-                        dest: '<%= buildDir %>/js'
-                    }
-                ]
+                files: [{
+                    expand: true,
+                    cwd: '<%= srcDir %>/templates',
+                    src: ['**/*'],
+                    dest: '<%= buildDir %>/js/templates'
+                }, {
+                    expand: true,
+                    cwd: '<%= srcDir %>/js',
+                    src: ['**/*'],
+                    dest: '<%= buildDir %>/js'
+                }, {
+                    expand: true,
+                    flatten: true,
+                    cwd: '<%= bowerDir %>',
+                    src: [
+                        'bootstrap/dist/js/bootstrap.js',
+                        'bootstrap3-typeahead/bootstrap3-typeahead.js',
+                        'backbone/backbone.js',
+                        'flux/dist/Flux.js',
+                        'jquery/dist/jquery.js',
+                        'loglevel/dist/loglevel.js',
+                        'marionette/lib/backbone.marionette.js',
+                        'marked/lib/marked.js',
+                        'react/react.js',
+                        'requirejs/require.js',
+                        'requirejs-text/text.js',
+                        'underscore/underscore.js',
+                        'url-template/lib/url-template.js'
+                    ],
+                    dest: '<%= buildDir %>/js'
+                }]
             },
 
             dist: {
-                files: [
-                    {
-                        expand: true,
-                        cwd: '<%= srcDir %>/html',
-                        src: ['**/*'],
-                        dest: '<%= distDir %>'
-                    }, {
-                        expand: true,
-                        cwd: '<%= srcDir %>/css',
-                        src: ['**/*'],
-                        dest: '<%= distDir %>/css'
-                    }, {
-                        expand: true,
-                        cwd: '<%= srcDir %>/fonts',
-                        src: ['**/*'],
-                        dest: '<%= distDir %>/fonts'
-                    }, {
-                        expand: true,
-                        cwd: '<%= srcDir %>/img',
-                        src: ['**/*'],
-                        dest: '<%= distDir %>/img'
-                    }, {
-                        expand: true,
-                        src: ['bower.json', 'package.json'],
-                        dest: '<%= distDir %>'
-                    }
-                ]
+                files: [{
+                    expand: true,
+                    cwd: '<%= srcDir %>/html',
+                    src: ['**/*'],
+                    dest: '<%= distDir %>'
+                }, {
+                    expand: true,
+                    src: ['bower.json', 'package.json'],
+                    dest: '<%= distDir %>'
+                }, {
+                    expand: true,
+                    flatten: true,
+                    cwd: '<%= bowerDir %>',
+                    src: [
+                        'fontawesome/css/font-awesome.css',
+                        'bootstrap/dist/css/bootstrap.css'
+                    ],
+                    dest: '<%= distDir %>/css'
+                }, {
+                    expand: true,
+                    flatten: true,
+                    cwd: '<%= bowerDir %>',
+                    src: [
+                        'fontawesome/fonts/*'
+                    ],
+                    dest: '<%= distDir %>/fonts'
+                }]
             },
 
             cdn: {
-                files: [
-                    {
-                        expand: true,
-                        cwd: '<%= srcDir %>/html',
-                        src: ['**/*'],
-                        dest: '<%= cdnDir %>'
-                    }
-                ]
+                files: [{
+                    expand: true,
+                    cwd: '<%= srcDir %>/html',
+                    src: ['**/*'],
+                    dest: '<%= cdnDir %>'
+                }]
             }
         },
 
         requirejs: {
             options: {
-                mainConfigFile: '<%= srcDir %>/js/origins/main.js',
+                mainConfigFile: '<%= srcDir %>/js/origins.js',
                 baseUrl: '.',
                 inlineText: true,
                 preserveLicenseComments: false,
@@ -248,12 +289,10 @@ module.exports = function(grunt) {
                 throwWhen: {
                     optimize: true
                 },
-                modules: [
-                    {
-                        name: pkg.name,
-                        exclude: vendorModules
-                    }
-                ]
+                modules: [{
+                    name: pkg.name,
+                    exclude: vendorModules
+                }]
             },
 
             dist: {
@@ -278,17 +317,33 @@ module.exports = function(grunt) {
         },
 
         clean: {
-            local: ['<%= localDir %>'],
-            build: ['<%= buildDir %>'],
-            dist: ['<%= distDir %>'],
-            cdn: ['<%= cdnDir %>'],
-            postdist: ['<%= distDir %>/js/templates'],
+            local: [
+                '<%= localDir %>'
+            ],
+
+            build: [
+                '<%= buildDir %>'
+            ],
+
+            dist: [
+                '<%= distDir %>'
+            ],
+
+            cdn: [
+                '<%= cdnDir %>'
+            ],
+
+            postdist: [
+                '<%= distDir %>/js/templates'
+            ],
+
             postcdn: [
                 '<%= cdnDir %>/js/templates',
                 '<%= cdnDir %>/js/require.js'
             ].concat(vendorModules.map(function(mod) {
                 return '<%= cdnDir %>/js/' + mod + '.js';
             })),
+
             release: [
                 '<%= localDir %>/js/build.txt',
                 '<%= distDir %>/js/build.txt',
@@ -304,14 +359,14 @@ module.exports = function(grunt) {
                 keepRunner: true,
                 template: require('grunt-template-jasmine-requirejs'),
                 templateOptions: {
-                    version: '<%= srcDir %>/js/require.js'
+                    version: '<%= bowerDir %>/requirejs/require.js'
                 }
             },
 
             local: {
                 options: {
                     templateOptions: {
-                        requireConfigFile: '<%= localDir %>/js/origins/main.js',
+                        requireConfigFile: '<%= localDir %>/js/origins.js',
                         requireConfig: {
                             baseUrl: '<%= localDir %>/js'
                         }
@@ -322,7 +377,7 @@ module.exports = function(grunt) {
             dist: {
                 options: {
                     templateOptions: {
-                        requireConfigFile: '<%= distDir %>/js/origins/main.js',
+                        requireConfigFile: '<%= distDir %>/js/origins.js',
                         requireConfig: {
                             baseUrl: '<%= distDir %>/js'
                         }
@@ -372,7 +427,7 @@ module.exports = function(grunt) {
                     '<%= srcDir %>/js/bootstrap.js',
                     '<%= srcDir %>/js/jquery.js',
                     '<%= srcDir %>/js/loglevel.js',
-                    '<%= srcDir %>/js/marionette.js',
+                    '<%= srcDir %>/js/backbone.marionette.js',
                     '<%= srcDir %>/js/require.js',
                     '<%= srcDir %>/js/text.js',
                     '<%= srcDir %>/js/tpl.js',

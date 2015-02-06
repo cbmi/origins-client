@@ -11,6 +11,7 @@ Install development dependencies for the Gruntfile:
 
 ```bash
 npm install
+bower install
 ```
 
 Start working:

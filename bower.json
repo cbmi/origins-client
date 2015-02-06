@@ -1,0 +1,37 @@
+{
+  "name": "origins-client",
+  "version": "0.1.0-beta3",
+  "homepage": "https://github.com/chop-dbhi/origins-client",
+  "authors": [
+    "Byron Ruth <b@devel.io>"
+  ],
+  "description": "Client for Origins",
+  "main": "src/js/origins.js",
+  "license": "BSD",
+  "ignore": [
+    "**/.*",
+    "bin",
+    "CONTRIBUTORS.md",
+    "CONTRIBUTING.md",
+    "package.json",
+    "_SpecRunner.html",
+    "Gruntfile.js",
+    "node_modules",
+    "bower_components",
+    "spec"
+  ],
+  "dependencies": {
+    "flux": "~2.0.2",
+    "fontawesome": "~4.3.0",
+    "loglevel": "~1.2.0",
+    "marionette": "~2.3.2",
+    "marked": "~0.3.3",
+    "react": "~0.12.2",
+    "requirejs": "~2.1.15",
+    "underscore": "~1.7.0",
+    "url-template": "~2.0.4",
+    "bootstrap": "~3.3.2",
+    "requirejs-text": "~2.0.13",
+    "bootstrap3-typeahead": "~3.1.0"
+  }
+}

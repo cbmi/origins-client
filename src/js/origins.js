@@ -8,6 +8,10 @@ require({
     },
     shim: {
         bootstrap: ['jquery']
+    },
+    paths: {
+        marionette: 'backbone.marionette',
+        flux: 'Flux'
     }
 }, ['./origins/main'], function(main) {
 

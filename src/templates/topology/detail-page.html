@@ -10,15 +10,12 @@
 
                     <div class='col-md-2'>
                         <ul class='nav nav-pills nav-stacked' data-target=nav>
-                            <li><a href='<%= data.urls.links %>'><i class='fa fa-link'></i> Links
+                            <li><a href='<%= data.urls.index %>'><i class='fa fa-link'></i> Links
                                 <% if (data.brokenLinkCount) { %>
                                     <span class='badge badge-error'><%= data.brokenLinkCount %></span>
                                 <% } %></a></li>
-                            <li><a href='<%= data.urls.paths %>'><i class='fa fa-long-arrow-right'></i> Paths</a></li>
                             <li><a href='<%= data.urls.entities %>'><i class='fa fa-cube'></i> Entities</a></li>
-                            <li><a href='<%= data.urls.feed %>'><i class='fa fa-rss'></i> Feed</a></li>
                             <li class=divider></li>
-                            <li><a href='<%= data.urls.importer %>'><i class='fa fa-plus'></i> Form</a></li>
                             <li><a href='<%= data.urls.settings %>'><i class='fa fa-cog'></i> Settings</a></li>
                         </ul>
                     </div>

@@ -8,14 +8,16 @@ define([
     '../utils',
     './base',
 
+    'tpl!templates/feed.html',
     'tpl!templates/feed/generation.html',
     'tpl!templates/feed/invalidation.html'
 ], function(_, Marionette, app, utils, base) {
 
     var templates = utils.templates([
+        'feed',
         'generation',
         'invalidation'
-    ], arguments, -2);
+    ], arguments, -3);
 
 
     var parseType = function(e) {
@@ -199,10 +201,15 @@ define([
     };
 
 
-    var List = base.CollectionView.extend({
+    var List = base.CompositeView.extend({
         className: 'timeline',
 
+        template: templates.feed,
+
+        childViewContainer: '[data-region=items]',
+
         options: {
+            title: 'Feed',
             loadingMessage: 'Loading timeline...',
             emptyHeader: 'Empty feed',
             emptyMessage: 'No events have been logged.'
@@ -210,8 +217,13 @@ define([
 
         getChildView: function(model) {
             return eventViews[model.get('type')];
-        }
+        },
 
+        serializeData: function() {
+            return {
+                title: this.getOption('title')
+            };
+        }
     });
 
 

@@ -1,6 +1,5 @@
-/* global define */
-
 define([
+    'react',
     'marionette',
 
     '../../app',
@@ -12,8 +11,11 @@ define([
     './list',
     './properties',
 
+    '../../components/resource/entity-summary',
+    '../../components/topology-summary',
+
     'tpl!templates/entity/detail-page.html'
-], function(Marionette, app, utils, feed, link, item, list, properties, template) {
+], function(React, Marionette, app, utils, feed, link, item, list, properties, EntitySummary, TopologySummary, template) {
 
     var DetailPage = Marionette.LayoutView.extend({
         template: template,
@@ -30,10 +32,9 @@ define([
 
         sections: {
             'index': 'showFeed',
-            'properties': 'showProperties',
-            'children': 'showChildren',
             'links': 'showLinks',
-            'paths': 'showPaths'
+            'properties': 'showProperties',
+            'children': 'showChildren'
         },
 
         behaviors: {
@@ -47,8 +48,8 @@ define([
             attrs.url = app.router.reverse('entity.index', attrs);
 
             attrs.urls = {
+                index: app.router.reverse('entity.index', attrs),
                 links: app.router.reverse('entity.links', attrs),
-                feed: app.router.reverse('entity.feed', attrs),
                 children: app.router.reverse('entity.children', attrs),
                 properties: app.router.reverse('entity.properties', attrs)
             };
@@ -84,13 +85,20 @@ define([
         },
 
         showChildren: function() {
-            this.model.children.fetch();
+            this.model.children.fetch().done(function() {
+                var region = this.getRegion('content');
+                region._ensureElement();
 
-            var view = new list.List({
-                collection: this.model.children
-            });
+                var entities = this.model.children.map(function(m) {
+                    return m.attributes;
+                });
 
-            this.getRegion('content').show(view);
+                React.render(EntitySummary({
+                    title: 'Children',
+                    entities: entities,
+                    description: false
+                }), region.$el[0]);
+            }.bind(this));
         },
 
         showFeed: function() {
@@ -104,25 +112,19 @@ define([
         },
 
         showLinks: function() {
-            this.model.links.fetch();
+            this.model.links.fetch().done(function() {
+                var region = this.getRegion('content');
+                region._ensureElement();
 
-            var view = new link.Table({
-                collection: this.model.links
-            });
+                var links = this.model.links.map(function(m) {
+                    return m.attributes;
+                });
 
-            this.getRegion('content').show(view);
-        },
-
-        showPaths: function() {
-            /*
-            this.model.paths.fetch();
-
-            var view = new path.List({
-                collection: this.model.paths
-            });
-
-            this.getRegion('content').show(view);
-            */
+                React.render(TopologySummary({
+                    title: 'Links',
+                    links: links
+                }), region.$el[0]);
+            }.bind(this));
         }
     });
 

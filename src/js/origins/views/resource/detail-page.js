@@ -1,5 +1,3 @@
-/* global define */
-
 define([
     'marionette',
     'marked',
@@ -15,10 +13,11 @@ define([
     './settings',
 
     '../../components/resource/entity-summary',
+    '../../components/topology-summary',
 
     'tpl!templates/resource/detail-page.html',
     'tpl!templates/resource/entities.html'
-], function(Marionette, marked, React, app, utils, base, entity, feed, link, item, settings, EntitySummary) {
+], function(Marionette, marked, React, app, utils, base, entity, feed, link, item, settings, EntitySummary, TopologySummary) {
 
 
     var templates = utils.templates([
@@ -84,12 +83,9 @@ define([
 
         sections: {
             index: 'showSummary',
-            feed: 'showFeed',
             links: 'showLinks',
-            paths: 'showPaths',
             entities: 'showEntities',
-            settings: 'showSettings',
-            importer: 'showImporter'
+            settings: 'showSettings'
         },
 
         serializeData: function() {
@@ -97,12 +93,10 @@ define([
 
             return {
                 urls: {
-                    feed: app.router.reverse('resource.feed', attrs),
+                    index: app.router.reverse('resource.index', attrs),
                     links: app.router.reverse('resource.links', attrs),
-                    paths: app.router.reverse('resource.paths', attrs),
-                    settings: app.router.reverse('resource.settings', attrs),
-                    importer: app.router.reverse('resource.importer', attrs),
-                    entities: app.router.reverse('resource.entities', attrs)
+                    entities: app.router.reverse('resource.entities', attrs),
+                    settings: app.router.reverse('resource.settings', attrs)
                 }
             };
         },
@@ -134,20 +128,31 @@ define([
                 var region = this.getRegion('content');
                 region._ensureElement();
 
+                var entities = this.model.entities.map(function(m) {
+                    return m.attributes;
+                });
+
                 React.render(EntitySummary({
-                    items: this.model.entities.map(function(m) {return m.attributes;})
+                    title: 'Summary',
+                    entities: entities,
                 }), region.$el[0]);
             }.bind(this));
         },
 
         showLinks: function() {
-            this.model.links.fetch();
+            this.model.links.fetch().done(function() {
+                var region = this.getRegion('content');
+                region._ensureElement();
 
-            var view = new link.Table({
-                collection: this.model.links
-            });
+                var links = this.model.links.map(function(m) {
+                    return m.attributes;
+                });
 
-            this.getRegion('content').show(view);
+                React.render(TopologySummary({
+                    title: 'Links',
+                    links: links
+                }), region.$el[0]);
+            }.bind(this));
         },
 
         showPaths: function() {

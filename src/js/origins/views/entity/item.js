@@ -1,14 +1,13 @@
-/* global define */
-
 define([
     'marionette',
+    'marked',
 
     '../../app',
     '../../utils',
     './path',
 
     'tpl!templates/entity/item.html'
-], function(Marionette, app, utils, path, template) {
+], function(Marionette, marked, app, utils, path, template) {
 
 
     var Item = Marionette.LayoutView.extend({
@@ -21,7 +20,8 @@ define([
             resource: true,
             path: true,
             link: true,
-            uuid: true
+            uuid: true,
+            description: true
         },
 
         behaviors: {
@@ -38,7 +38,8 @@ define([
                 showLink: this.getOption('link'),
                 showResource: this.getOption('resource'),
                 showPath: this.getOption('path'),
-                showUUID: this.getOption('uuid')
+                showUUID: this.getOption('uuid'),
+                showDescription: this.getOption('description')
             };
         },
 
@@ -55,6 +56,10 @@ define([
             };
 
             attrs.resource.url = app.router.reverse('resource.index', attrs.resource);
+
+            if (attrs.description) {
+                attrs.description = marked(attrs.description);
+            }
 
             return attrs;
         },

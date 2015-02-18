@@ -154,3 +154,9 @@ $radius: 2px;
 .is-empty {
     color: #777;
 }
+
+[data-region=content] {
+    :first-child {
+        margin-top: 0;
+    }
+}

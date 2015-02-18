@@ -19,7 +19,8 @@ define([
 
         getDefaultProps: function() {
             return {
-                attrs: {}
+                attrs: {},
+                description: true
             };
         },
 
@@ -31,6 +32,12 @@ define([
 
             var url = app.router.reverse('entity.index', attrs);
 
+            var description;
+
+            if (this.props.description) {
+                description = <div className="section-description" dangerouslySetInnerHTML={{__html: marked(attrs.description || '')}} />;
+            }
+
             return (
                 <div className="section-attrs">
                     <span className="timesince" title={attrs.parsedTime.toLocaleString()}>{timeSince}</span>
@@ -38,7 +45,8 @@ define([
                     <div className="section-label">
                         <a href={url}>{attrs.label}</a>
                     </div>
-                    <div className="section-description" dangerouslySetInnerHTML={{__html: marked(attrs.description || '')}} />
+
+                    {description}
                 </div>
             );
         }
@@ -50,12 +58,13 @@ define([
             return {
                 section: null,
                 items: [],
-                depth: 0
+                depth: 0,
+                description: true
             };
         },
 
         render: function() {
-            var type, types = [];
+            var type, types = [], description = this.props.description;
 
             var items = this.props.items.map(function(attrs) {
                 type = pluralize(attrs.type);
@@ -64,7 +73,7 @@ define([
                     types.push(type);
                 }
 
-                return <SectionItem attrs={attrs} />;
+                return <SectionItem attrs={attrs} description={description} />;
             });
 
             types = types.join(', ');
@@ -73,7 +82,7 @@ define([
                 sectionId = this.props.section.uuid,
                 sectionDesc;
 
-            if (this.props.section.description) {
+            if (description && this.props.section.description) {
                 sectionDesc = <div dangerouslySetInnerHTML={{__html: marked(this.props.section.description)}} />;
             }
 
@@ -94,6 +103,7 @@ define([
     var TableOfContents = React.createClass({
         getDefaultProps: function() {
             return {
+                title: '',
                 tree: {}
             };
         },
@@ -123,7 +133,7 @@ define([
 
             return (
                 <div className="toc">
-                    <h3>Table of Contents</h3>
+                    <h3>{this.props.title}</h3>
                     <ul>{items}</ul>
                 </div>
             );
@@ -134,13 +144,19 @@ define([
     var Content = React.createClass({
         getDefaultProps: function() {
             return {
-                sections: []
+                sections: [],
+                description: true
             };
         },
 
         render: function() {
+            var description = this.props.description;
+
             var elements = this.props.sections.map(function(s) {
-                return <Section section={s.section} items={s.items} depth={s.depth} />;
+                return <Section section={s.section}
+                                items={s.items}
+                                depth={s.depth}
+                                description={description} />;
             });
 
             return (
@@ -157,12 +173,6 @@ define([
     //
     // Entities will be grouped into sets by type
     var EntitySummary = React.createClass({
-        getDefaultProps: function() {
-            return {
-                items: []
-            };
-        },
-
         addToNode: function(item, node) {
             // Does not exist in the tree, add it
             if (node.index[item.id] === undefined) {
@@ -276,14 +286,22 @@ define([
             return sections;
         },
 
+        getDefaultProps: function() {
+            return {
+                title: 'Entities',
+                entities: [],
+                description: true
+            };
+        },
+
         render: function() {
-            var tree = this.buildTree(this.props.items),
+            var tree = this.buildTree(this.props.entities),
                 sections = this.getSections(tree);
 
             return (
                 <div>
-                    <TableOfContents tree={tree} />
-                    <Content sections={sections} />
+                    <TableOfContents title={this.props.title} tree={tree} />
+                    <Content sections={sections} description={this.props.description} />
                 </div>
             );
         }
